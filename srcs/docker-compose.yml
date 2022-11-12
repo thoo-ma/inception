@@ -1,0 +1,17 @@
+version: "3"
+
+# `image` sections are omitted since `build` sections are defined.
+# However `build` is not guaranteed to be supported by any compose implementation.
+# (cf. https://docs.docker.com/compose/compose-file/build/)
+services:
+  nginx:
+    build: requirements/nginx
+  mariadb:
+    build: requirements/mariadb
+  wordpress:
+    build: requirements/wordpress
+
+# name: inception
+# volumes:
+# secrets:
+# configs:
