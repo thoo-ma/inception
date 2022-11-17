@@ -1,4 +1,4 @@
-# Ressources
+## Ressources
 
 [overview](https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a)
 
@@ -12,7 +12,15 @@
 
 [awesome compose](https://github.com/docker/awesome-compose)
 
-# To do on host machine before anything else
+[changing location of docker volumes](https://dbafromthecold.com/2018/05/02/changing-the-location-of-docker-named-volumes/)
+
+[About docker-compose LEMP](https://tech.osteel.me/posts/docker-for-local-web-development-part-1-a-basic-lemp-stack)
+
+[Worpress with Docker](https://www.hostinger.fr/tutoriels/docker-wordpress)
+
+[Mysql bind-address into Docker container](http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/)
+
+## To do on host machine before anything else
 
 1. add `127.0.0.1 localhost trobin.42.fr` to `/etc/hosts`
 
@@ -26,3 +34,6 @@ sudo usermod -aG docker $USER && \
 newgrp docker
 ```
 
+## Useful commands
+
+`docker run -it repository:tag`
