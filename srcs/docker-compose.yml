@@ -1,17 +1,28 @@
-version: "3"
+version: "3.8"
 
-# `image` sections are omitted since `build` sections are defined.
+name: "inception"
+
+# For each service, `image` section is omitted since `build` section is defined.
 # However `build` is not guaranteed to be supported by any compose implementation.
 # (cf. https://docs.docker.com/compose/compose-file/build/)
 services:
-  nginx:
-    build: requirements/nginx
+  #  nginx:
+  #    build: requirements/nginx
+  #  wordpress:
+  #    build: requirements/wordpress
   mariadb:
     build: requirements/mariadb
-  wordpress:
-    build: requirements/wordpress
+      #    volumes:
+      #      - db_mariadb:/home/trobin/
 
-# name: inception
-# volumes:
+volumes:
+  #  db_wordpress:
+  #  db_mariadb:
+    #    driver: local # local-persist
+    #    driver_opts:
+    #      type: none
+    #      o: bind
+    #      device: /home/trobin/data/mariadb
+
 # secrets:
 # configs:
