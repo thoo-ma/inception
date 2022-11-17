@@ -20,6 +20,10 @@
 
 [Mysql bind-address into Docker container](http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/)
 
+[SQL videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=sql)
+
+[Docker videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=docker)
+
 ## To do on host machine before anything else
 
 1. add `127.0.0.1 localhost trobin.42.fr` to `/etc/hosts`
