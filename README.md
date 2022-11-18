@@ -42,6 +42,8 @@
 
 [SQL videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=sql)
 
+[About mariadb.sys user](https://www.thegeekdiary.com/what-is-the-purpose-of-mysql-syslocalhost-user/)
+
 ## To do on host machine before anything else
 
 1. add `127.0.0.1 localhost trobin.42.fr` to `/etc/hosts`
@@ -59,3 +61,7 @@ newgrp docker
 ## Useful commands
 
 `docker run -it repository:tag`
+
+List all mysql users
+
+`SELECT User, Host, Password FROM mysql.user;`

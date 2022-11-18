@@ -1,13 +1,6 @@
 From debian:buster
 
-# 1. download mysql
-# 2. secure installation (following the `mysql_secure_instalation` prompt order)
-#     2.1 give password to mysql root user
-#     2.2 remove anonymous user
-#     2.3 allow mysql root user to connect only from localhost
-#     2.4 remove test database
-# 3. setup missing files and repositories
-# 4. start mysql server/daemon (`mysql` and not `mysqld` on debian) with mysql host OS user
+# -------- Documentation ----------------------------------------------------- #
 
 # mysql doc
 # cf. https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html
@@ -22,32 +15,63 @@ From debian:buster
 # cf. https://docs.docker.com/storage/volumes/
 # cf. http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/
 
+# -------- Installation ------------------------------------------------------ #
+
 RUN apt-get update
-RUN apt-get install -y mariadb-common mariadb-server mariadb-client
-#RUN apt-get install -y apt-utils
 RUN apt-get install -y expect
 RUN apt-get install -y vim
+RUN apt-get install -y curl
+RUN apt-get install -y ca-certificates
+RUN apt-get install -y tree
+#RUN apt-get install -y apt-utils
 
-# Why this is not automatically created ?
-# Seems to be related to `systemd` and `INSTALL_LAYOUT` (cf. `DSYSTEMD_PID_DIR`)
-RUN mkdir -p /var/run/mysqld/
-RUN touch /var/run/mysqld/mysqld.sock
-RUN chmod -R 777 /var/run/mysqld
-RUN chown -R mysql:mysql /var/run/mysqld
+# /!\ LTS FTW /!\
+# By default, mariadb-server apt package will refer to version 10.3
+# We add mariadb apt repository to install instead mariadb LTS (10.6)
+# Anyway both replicate mysql 5.7 (cf. https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility)
+# For more information about this whole apt thing, how this script behaves and what are the consequences see:
+# - https://mariadb.com/kb/en/mariadb-package-repository-setup-and-usage/
+# - https://mariadb.com/kb/en/mariadb-package-repository-setup-and-usage/#platform-specific-behavior-on-debian-and-ubuntu
+# - https://mariadb.com/kb/en/differences-in-mariadb-in-debian-and-ubuntu/
+RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup \
+  | bash -s -- --mariadb-server-version="mariadb-10.6"
+RUN apt-get install -y mariadb-common mariadb-server mariadb-client # do we really need mariadb-client ?
+
+# -------- Configuration ----------------------------------------------------- #
+
+# Why this is not automatically created ? And is it still useful since
+# we will switch from `unix socket` to `ed25519` authentication plugin ?
+RUN mkdir -p /run/mysqld/
+RUN touch /run/mysqld/mysqld.sock
+RUN chmod -R 777 /run/mysqld
+RUN chown -R mysql:mysql /run/mysqld
+
+# TODO
+# cf. https://mariadb.com/kb/en/authentication-plugin-ed25519/
+# cf. https://mariadb.com/kb/en/authentication-plugin-unix-socket/
+# rename mysql root user
+
+# WORKDIR /etc/mysql/mariadb.conf.d
+# ARG server_config=50-server.cnf
+
+# Will setup few things here (`mysql_install_db` would also be an option)
+ARG server_config=/etc/mysql/mariadb.conf.d/50-server.cnf
+
+# mysql server/daemon will _always_ start from mysql host user
+RUN sed -ie 's/^#user\s*=\s*mysql/user = mysql/' $server_config
+
+# Add ed25519 authentication plugin
+RUN sed -ie '/^\[mariadb\]$/a plugin_load_add = auth_ed25519' $server_config
+
+# Remove unix socket authentication plugin
+RUN sed -ie '/^\[mariadb\]$/a disable_unix_socket' $server_config
 
 # ??
-RUN cat /etc/mysql/mariadb.conf.d/50-server.cnf | grep bind-address; exit 0
-RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
-RUN cat /etc/mysql/mariadb.conf.d/50-server.cnf | grep bind-address; exit 0
+RUN sed -ie 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' $server_config
 
-# mysql secure installation
-# RUN mkdir -p /scripts
-# COPY conf/mysql_secure_installation.sh /scripts
-# RUN chmod +x /scripts/mysql_secure_installation.sh
-# RUN /scripts/mysql_secure_installation.sh
-
-# For security concern, mysql server should not be started by root user.
-# The prefered user to do so is the mysql user.
+# /!\ DELETE /!\
+# For security concern, mysql server should not be started by the host root user.
+# The prefered user to do so is the mysql host user.
 # This user is created during the mariadb installation performed above.
 # However, we can't login with this user since his login shell is `/bin/false'
 # (cat /etc/passwd | grep mysql | awk -F ':' '{ print $7 }' )
@@ -60,21 +84,12 @@ RUN cat /etc/mysql/mariadb.conf.d/50-server.cnf | grep bind-address; exit 0
 # RUN usermod --shell /bin/bash mysql
 # RUN cat /etc/passwd | grep mysql | awk -F ':' '{ print $7 }'
 
-# What mariadb installation from `apt` package do for us:
-# - create the `mysql` user
-# - create and initialize `data directory` at `/var/lib/mysql`
-#   (cf. https://dev.mysql.com/doc/refman/8.0/en/data-directory-initialization.html)
+# More config with this script (add mysql root password with few other things)
+COPY conf/* /scripts/
+RUN chmod +x /scripts/*.sh
+# RUN ./scripts/mysql_secure_installation.sh
 
-# Data directory is automatically created and initialized at `/var/lib/mysql`
-# RUN mysql_install_db --user=mysql
-# RUN mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --user=mysql --rpm > /dev/null
-
-# --- DON'T WORK
-# Start the mysql server
-# They say using `service mysql start` is not a good idea -- but why ?...
-#USER mysql
-#RUN mysqld --user=mysql &
-#RUN mysqld_safe --user=mysql
+# -------- Testing ----------------------------------------------------------- #
 
 # Ensure that mysql server is running
 #RUN mysqladmin version # equivalent to `service mysql status`
@@ -87,12 +102,12 @@ RUN cat /etc/mysql/mariadb.conf.d/50-server.cnf | grep bind-address; exit 0
 #RUN chown -R mysql:mysql /home/trobin/data/mariadb
 #RUN mysql -e "CREATE DATABASE inception"
 
+# -------- Network ----------------------------------------------------------- #
+
 #EXPOSE 3306
 
+# -------- Entrypoint -------------------------------------------------------- #
+
 # Start mysql server as process 1 (IS IT A GOOD IDEA ?...)
-
-COPY conf/* /scripts/
-RUN chmod +x /scripts/*.sh
-
-#CMD ["mysqld", "--user=mysql"]
+# CMD ["mysqld", "--user=mysql", "&"]
 # CMD ["bash", "scripts/startup.sh"]

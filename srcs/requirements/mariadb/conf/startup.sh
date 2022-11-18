@@ -1,23 +1,17 @@
 #!/bin/bash
 
-#service mysql status
-#mysqld --user=mysql &
-#sleep 2
-#service mysql status
+# -----------------------------------------------------------------------------
 
-service mysql start
+# start mysql server with mysql host user (cf. top)
+mysqld --user=mysql &
 
-mysql_secure_installation <<EOF
+# run mysql_secure_installation (which add a password to mysql root user)
+./expect.sh
 
-y
-root_password
-root_password
-y
-y
-y
-y
-EOF
+# setup `ed25519` authentication plugin
+# (Hoping that, while logged as root on host machine, trying to connect with
+# `mysql -u root -p` with wrong password won't let us get in !...)
 
-service mysql stop
+# change mysql root user name
 
-#exec mysqld --user=mysql --console
+# -----------------------------------------------------------------------------
