@@ -2,8 +2,6 @@
 
 FROM debian:buster
 
-# WORKDIR
-
 RUN apt-get update && apt-get install -y nginx openssl
 
 # note that into `/etc/nginx/nginx.conf`, http context has
@@ -25,6 +23,9 @@ RUN openssl req \
 
 # cf. https://stackoverflow.com/questions/22111060/
 EXPOSE 443
+
+RUN mkdir -p /home/trobin/data/www
+RUN echo "<!doctype html>\n<head></head>\n<body>yo</body>" > /home/trobin/data/www/index.html
 
 # RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 # CMD ["nginx"]

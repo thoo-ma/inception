@@ -6,23 +6,27 @@ name: "inception"
 # However `build` is not guaranteed to be supported by any compose implementation.
 # (cf. https://docs.docker.com/compose/compose-file/build/)
 services:
-  #  nginx:
-  #    build: requirements/nginx
+  nginx:
+    build: requirements/nginx
+    ports:
+      - "443:443"
   #  wordpress:
   #    build: requirements/wordpress
   mariadb:
     build: requirements/mariadb
-      #    volumes:
-      #      - db_mariadb:/home/trobin/
+    environment:
+      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
+    volumes:
+      - db_mariadb:/home/trobin/
 
 volumes:
   #  db_wordpress:
-  #  db_mariadb:
-    #    driver: local # local-persist
-    #    driver_opts:
-    #      type: none
-    #      o: bind
-    #      device: /home/trobin/data/mariadb
+  db_mariadb:
+    driver: local # local-persist
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/trobin/data/mariadb
 
 # secrets:
 # configs:
