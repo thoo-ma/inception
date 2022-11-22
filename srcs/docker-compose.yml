@@ -1,6 +1,6 @@
 version: "3.8"
 
-name: "inception"
+#name: "inception"
 
 # For each service, `image` section is omitted since `build` section is defined.
 # However `build` is not guaranteed to be supported by any compose implementation.
@@ -10,17 +10,25 @@ services:
     build: requirements/nginx
     ports:
       - "443:443"
+    volumes:
+      - db_wordpress:/home/trobin/data/www
   #  wordpress:
   #    build: requirements/wordpress
   mariadb:
     build: requirements/mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
+      #    environment:
+      #      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
     volumes:
-      - db_mariadb:/home/trobin/
+      - db_mariadb:/home/trobin/data/mariadb
 
+# todo: remove 'db_' prefix
 volumes:
-  #  db_wordpress:
+  db_wordpress:
+    driver: local # local-persist
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/trobin/data/www
   db_mariadb:
     driver: local # local-persist
     driver_opts:

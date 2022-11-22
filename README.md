@@ -12,8 +12,6 @@
 
 ### wordpress
 
-[Worpress with Docker](https://www.hostinger.fr/tutoriels/docker-wordpress)
-
 ### Docker
 
 [containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)

@@ -1,8 +1,11 @@
 # todo: use env variables
+# curl -k https://trobin.42.fr
+# curl -k https://localhost:443
 
 FROM debian:buster
 
-RUN apt-get update && apt-get install -y nginx openssl
+# note some packages are for testing purpose only (curl, procps, vim, lynx)
+RUN apt-get update && apt-get install -y nginx openssl curl procps vim # lynx
 
 # note that into `/etc/nginx/nginx.conf`, http context has
 # the following directive: include /etc/nginx/conf.d/*.conf
@@ -24,11 +27,18 @@ RUN openssl req \
 # cf. https://stackoverflow.com/questions/22111060/
 EXPOSE 443
 
-RUN mkdir -p /home/trobin/data/www
-RUN echo "<!doctype html>\n<head></head>\n<body>yo</body>" > /home/trobin/data/www/index.html
+# These files and folders are now into host machine.
+# Thanks to docker volumes we bind mount these to be accessible inside the container.
+# cf. docker-compose.yml
+#RUN mkdir -p /home/trobin/data/www
+#RUN echo "<!doctype html>\n<head></head>\n<body>yo</body>" > /home/trobin/data/www/index.html
 
-# RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
-# CMD ["nginx"]
+# /!\ doesn't work /!\
+#RUN echo "127.0.0.1 localhost trobin.42.fr" >> /etc/hosts
 
-CMD ["nginx", "-g", "daemon off;"]
+# Just testing. Will be removed.
+RUN echo "\ndaemon on;" >> /etc/nginx/nginx.conf
+CMD ["/bin/bash"]
+
+#CMD ["nginx", "-g", "daemon off;"]
 # ENTRYPOINT ["nginx", "-g", "daemon off;"]
