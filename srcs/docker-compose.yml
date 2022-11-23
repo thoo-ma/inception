@@ -1,40 +1,71 @@
 version: "3.8"
 
-#name: "inception"
-
-# For each service, `image` section is omitted since `build` section is defined.
-# However `build` is not guaranteed to be supported by any compose implementation.
-# (cf. https://docs.docker.com/compose/compose-file/build/)
 services:
   nginx:
     build: requirements/nginx
     ports:
       - "443:443"
+    expose:
+      - "9000"
     volumes:
-      - db_wordpress:/home/trobin/data/www
-  #  wordpress:
-  #    build: requirements/wordpress
+      - db_wordpress:/var/www/inception
+    restart: always
+      #  wordpress:
+      #    build: requirements/wordpress
+      #    restart: always
+      #    expose:
+      #      - "3306"
+      #      - "9000"
+      #    depends_on:
+      #      mariadb:
+      #        condition: service_started # service_ [ started | healthy | completed_successfully ]
   mariadb:
     build: requirements/mariadb
-      #    environment:
-      #      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
     volumes:
-      - db_mariadb:/home/trobin/data/mariadb
+      - db_mariadb:/var/lib/mysql
+    # - db_mariadb:$(MYSQL_DATA_DIRECTORY)
+    restart: always
+    expose:
+      - "3306"
+    #    environment:
+    #      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
 
 # todo: remove 'db_' prefix
 volumes:
   db_wordpress:
-    driver: local # local-persist
+    driver: local # local-persist (?)
     driver_opts:
       type: none
       o: bind
-      device: /home/trobin/data/www
+      device: /home/trobin/data/wordpress
   db_mariadb:
-    driver: local # local-persist
+    driver: local # local-persist (?)
     driver_opts:
       type: none
       o: bind
       device: /home/trobin/data/mariadb
 
+networks:
+  default:
+    name: inception
+
 # secrets:
 # configs:
+# name: "inception"
+
+# About `restart`
+# https://github.com/compose-spec/compose-spec/blob/master/spec.md#restart
+# https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy
+# https://serverfault.com/a/884823
+
+# About `depends_on`
+# https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on
+# https://github.com/compose-spec/compose-spec/blob/master/spec.md#healthcheck
+# https://www.baeldung.com/ops/docker-compose-links-depends-on
+
+# About network
+# https://www.baeldung.com/ops/docker-compose-expose-vs-ports
+
+# TODO
+# on host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
+# add `COMPOSE_PROJECT_NAME=inception` into `.env` -- or add top-level `name: "inception"` here

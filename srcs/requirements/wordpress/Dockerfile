@@ -1,6 +1,7 @@
 FROM debian:buster
 
-# cf. https://www.linode.com/docs/guides/how-to-install-wordpress-using-wp-cli-on-debian-10/#install-wp-cli
+# cf. https://www.linode.com/docs/guides/how-to-install-wordpress-using-wp-cli-on-debian-10/
+# cf. https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/
 
 #RUN apt-get install -y php php-mysql php-fpm wp-cli
 RUN apt-get update
@@ -22,5 +23,11 @@ RUN wget -O wp-completion.bash \
     https://raw.githubusercontent.com/wp-cli/wp-cli/v2.7.1/utils/wp-completion.bash \
     && echo "source /tmp/wp-completion.bash" >> ~/.bashrc \
     && echo "alias wp='wp --allow-root'" >> ~/.bashrc # tmp
+
+# Create the wordpress database (assume mariadb container is running)
+# (SHOULD persist even if the corresponding docker volume is deleted!)
+#RUN mkdir -p /home/trobin/data/mariadb
+#RUN chown -R mysql:mysql /home/trobin/data/mariadb
+#RUN mysql -e "CREATE DATABASE inception"
 
 SHELL ["/bin/bash", "source", "~/.bashrc" ]

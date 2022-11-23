@@ -71,6 +71,9 @@ RUN sed -i -e 's/^#user\s*=\s*mysql/user = mysql/' $server_config
 # ??
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' $server_config
 
+# Change mysql data directory location to match docker volume `db_mariadb` on host machine
+# RUN sed -i -e 's/^#datadir\s*=\s*\/var\/lib\/mysql/datadir = \/home\/trobin\/data\/mariadb/' $server_config
+
 # /!\ DELETE /!\
 # RUN cat /etc/passwd | grep mysql | awk -F ':' '{ print $7 }'
 # RUN usermod --shell /bin/bash mysql
@@ -81,14 +84,9 @@ COPY conf/* /scripts/
 RUN chmod +x /scripts/*.sh
 RUN ./scripts/conf.sh
 
-RUN echo $MYSQL_ROOT_PASSWORD
-
 # -------- Testing ----------------------------------------------------------- #
 
-# Create the database
-#RUN mkdir -p /home/trobin/data/mariadb
-#RUN chown -R mysql:mysql /home/trobin/data/mariadb
-#RUN mysql -e "CREATE DATABASE inception"
+#RUN echo $MYSQL_ROOT_PASSWORD
 
 # -------- Network ----------------------------------------------------------- #
 
@@ -98,3 +96,4 @@ RUN echo $MYSQL_ROOT_PASSWORD
 
 # Start mysql server as process 1 (IS IT A GOOD IDEA ?...)
 # CMD ["mysqld"]
+# CMD ["mysqld", "--log-bin=mysqld-bin"]

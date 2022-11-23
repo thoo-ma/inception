@@ -11,7 +11,9 @@ RUN apt-get update && apt-get install -y nginx openssl curl procps vim # lynx
 # the following directive: include /etc/nginx/conf.d/*.conf
 COPY conf/nginx.conf /etc/nginx/conf.d
 
-#RUN chown -R nginx:nginx /var/www;
+# What to do with this ?...
+# RUN chown -R www-data:www-data /var/www;
+# RUN chown -R nginx:nginx /var/www;
 
 # cf. https://stackoverflow.com/a/23038211
 RUN openssl req \
@@ -27,18 +29,9 @@ RUN openssl req \
 # cf. https://stackoverflow.com/questions/22111060/
 EXPOSE 443
 
-# These files and folders are now into host machine.
-# Thanks to docker volumes we bind mount these to be accessible inside the container.
-# cf. docker-compose.yml
-#RUN mkdir -p /home/trobin/data/www
-#RUN echo "<!doctype html>\n<head></head>\n<body>yo</body>" > /home/trobin/data/www/index.html
+# Doesn't work cause we not root here
+# RUN echo '127.0.0.1 localhost trobin.42.fr' >> /etc/hosts
 
-# /!\ doesn't work /!\
-#RUN echo "127.0.0.1 localhost trobin.42.fr" >> /etc/hosts
-
-# Just testing. Will be removed.
-RUN echo "\ndaemon on;" >> /etc/nginx/nginx.conf
-CMD ["/bin/bash"]
-
-#CMD ["nginx", "-g", "daemon off;"]
+# On pause for the moment to run in interactive mode (cf. Makefile)
+# CMD ["nginx", "-g", "daemon off;"]
 # ENTRYPOINT ["nginx", "-g", "daemon off;"]
