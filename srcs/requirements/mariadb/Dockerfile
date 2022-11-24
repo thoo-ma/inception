@@ -23,6 +23,8 @@ RUN apt-get install -y vim
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y tree
+RUN apt-get install -y tree
+#RUN apt-get install -y net-tools # netstat
 #RUN apt-get install -y apt-utils
 
 # /!\ LTS FTW /!\
@@ -68,11 +70,8 @@ RUN sed -i -e 's/^#user\s*=\s*mysql/user = mysql/' $server_config
 # Commands like `mysqladmin version` or `service mariadb status` won't be available anymore...
 #RUN sed -i -e '/^\[mariadb\]$/a disable_unix_socket' $server_config
 
-# ??
+# For mysql server/daemon to be accessible from anywhere (not only localhost i.e. this container)
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' $server_config
-
-# Change mysql data directory location to match docker volume `db_mariadb` on host machine
-# RUN sed -i -e 's/^#datadir\s*=\s*\/var\/lib\/mysql/datadir = \/home\/trobin\/data\/mariadb/' $server_config
 
 # /!\ DELETE /!\
 # RUN cat /etc/passwd | grep mysql | awk -F ':' '{ print $7 }'
@@ -83,8 +82,6 @@ RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' $server_
 COPY conf/* /scripts/
 RUN chmod +x /scripts/*.sh
 RUN ./scripts/conf.sh
-
-# -------- Testing ----------------------------------------------------------- #
 
 #RUN echo $MYSQL_ROOT_PASSWORD
 

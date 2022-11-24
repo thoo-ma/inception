@@ -28,6 +28,5 @@ RUN wget -O wp-completion.bash \
 # (SHOULD persist even if the corresponding docker volume is deleted!)
 #RUN mkdir -p /home/trobin/data/mariadb
 #RUN chown -R mysql:mysql /home/trobin/data/mariadb
-#RUN mysql -e "CREATE DATABASE inception"
 
 SHELL ["/bin/bash", "source", "~/.bashrc" ]

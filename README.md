@@ -58,7 +58,6 @@ newgrp docker
 
 ## Useful commands
 
-`docker run -it repository:tag`
-
 List all mysql users: `SELECT User, Host, Password FROM mysql.user;`
 List all mysql databases: `SHOW DATABASES;`
+List all listening ports: `netstat -tulpn | grep LISTEN`

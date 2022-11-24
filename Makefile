@@ -13,10 +13,15 @@ volumes:				mariadb_volume wordpress_volume
 mariadb: 				mariadb_volume
 						cd $(docker_compose_dir) \
 						&& docker compose build mariadb \
-						&& docker compose run mariadb
+						&& docker compose run --name=mariadb mariadb
+
 
 nginx:					wordpress_volume
 						cd $(docker_compose_dir) \
 						&& docker compose build nginx \
-						&& docker compose run --interactive nginx
+						&& docker compose run --name=nginx --interactive nginx
 
+wordpress:
+						cd $(docker_compose_dir) \
+						&& docker compose build wordpress \
+						&& docker compose run --name=wordpress --interactive wordpress

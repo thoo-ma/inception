@@ -1,0 +1,22 @@
+server {
+
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    root /var/www/inception;
+    index index.html;
+
+    server_name $DOMAIN_NAME;
+
+    location / {
+        autoindex on;
+        # cf. https://stackoverflow.com/a/57891894
+        # to see how not substitute these '$'
+        #    try_files $uri $uri/ =404;
+    }
+
+    ssl_protocols TLSv1.3;
+    ssl_certificate ${SSL_CERTIFICATE};
+    ssl_certificate_key ${SSL_CERTIFICATE_KEY};
+
+}

@@ -1,25 +1,30 @@
 version: "3.8"
 
 services:
-  nginx:
+  nginx: # --------------------------------------------------------------------
     build: requirements/nginx
     ports:
-      - "443:443"
+      - "443:443" # host_port:container_port
+      #   - target: 443 # container port
+      #     published: 443 # host port
+      #     protocol: tcp
+      #     mode: host
     expose:
       - "9000"
     volumes:
       - db_wordpress:/var/www/inception
     restart: always
-      #  wordpress:
-      #    build: requirements/wordpress
-      #    restart: always
-      #    expose:
-      #      - "3306"
-      #      - "9000"
-      #    depends_on:
-      #      mariadb:
-      #        condition: service_started # service_ [ started | healthy | completed_successfully ]
-  mariadb:
+    env_file: .env
+  wordpress: # ----------------------------------------------------------------
+    build: requirements/wordpress
+    restart: always
+    expose:
+      - "3306"
+      - "9000"
+        #  depends_on:
+        #    mariadb:
+        #      condition: service_started # service_ [ started | healthy | completed_successfully ]
+  mariadb: # ------------------------------------------------------------------
     build: requirements/mariadb
     volumes:
       - db_mariadb:/var/lib/mysql
@@ -27,8 +32,10 @@ services:
     restart: always
     expose:
       - "3306"
+    # container_name: inception-mariadb
     #    environment:
     #      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
+# -----------------------------------------------------------------------------
 
 # todo: remove 'db_' prefix
 volumes:
@@ -48,6 +55,8 @@ volumes:
 networks:
   default:
     name: inception
+      #  labels:
+      #    com.docker.compose.project: "inception"
 
 # secrets:
 # configs:
@@ -64,7 +73,15 @@ networks:
 # https://www.baeldung.com/ops/docker-compose-links-depends-on
 
 # About network
+# https://docs.docker.com/compose/networking/
+# https://www.aquasec.com/cloud-native-academy/docker-container/docker-networking/
 # https://www.baeldung.com/ops/docker-compose-expose-vs-ports
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#ports
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#expose
+
+# About env
+# https://docs.docker.com/compose/environment-variables/
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#env_file
 
 # TODO
 # on host, set owner for docker volumes (systemd-resolve:systemd-journal by default)

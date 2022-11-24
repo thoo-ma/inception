@@ -5,11 +5,18 @@
 FROM debian:buster
 
 # note some packages are for testing purpose only (curl, procps, vim, lynx)
-RUN apt-get update && apt-get install -y nginx openssl curl procps vim # lynx
+RUN apt-get update && apt-get install -y nginx openssl curl procps vim gettext # lynx
 
 # note that into `/etc/nginx/nginx.conf`, http context has
 # the following directive: include /etc/nginx/conf.d/*.conf
 COPY conf/nginx.conf /etc/nginx/conf.d
+
+# COPY conf/nginx.conf.template /tmp/nginx.conf.template
+# RUN envsubst < /tmp/nginx.conf.template > /etc/nginx/conf.d/nginx.conf
+# RUN /bin/bash -c source /home/trobin/inception/srcs/.env \
+#    && envsubst < /tmp/template > /etc/nginx/conf.d/nginx.conf
+# RUN /bin/bash -c echo $DOMAIN_NAME > /tmp/domain
+# RUN echo $DOMAIN_NAME >> /tmp/domain
 
 # What to do with this ?...
 # RUN chown -R www-data:www-data /var/www;
@@ -22,7 +29,8 @@ RUN openssl req \
     -sha256 \
     -days 365 \
     -newkey rsa:4096 \
-    -out /etc/ssl/certs/trobin.42.fr.crt \
+    #-out /etc/ssl/certs/trobin.42.fr.crt \
+    -out ${SSL_CERTIFICATE} \
     -keyout /etc/ssl/private/trobin.42.fr.key \
     -subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=trobin/CN=trobin.42.fr/"
 
