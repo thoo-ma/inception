@@ -3,38 +3,40 @@ version: "3.8"
 services:
   nginx: # --------------------------------------------------------------------
     build: requirements/nginx
+    container_name: nginx
     ports:
       - "443:443" # host_port:container_port
-      #   - target: 443 # container port
-      #     published: 443 # host port
-      #     protocol: tcp
-      #     mode: host
+#     - target: 443 # container port
+#       published: 443 # host port
+#       protocol: tcp
+#       mode: host
     expose:
       - "9000"
     volumes:
       - db_wordpress:/var/www/inception
-    restart: always
+#   restart: always
     env_file: .env
   wordpress: # ----------------------------------------------------------------
     build: requirements/wordpress
-    restart: always
+    container_name: wordpress
     expose:
       - "3306"
       - "9000"
-        #  depends_on:
-        #    mariadb:
-        #      condition: service_started # service_ [ started | healthy | completed_successfully ]
+#   depends_on:
+#     mariadb:
+#       condition: service_started # service_ [ started | healthy | completed_successfully ]
+#   restart: always
   mariadb: # ------------------------------------------------------------------
     build: requirements/mariadb
+    container_name: mariadb
     volumes:
       - db_mariadb:/var/lib/mysql
     # - db_mariadb:$(MYSQL_DATA_DIRECTORY)
-    restart: always
     expose:
       - "3306"
-    # container_name: inception-mariadb
-    #    environment:
-    #      MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
+#   environment:
+#     MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
+#   restart: always
 # -----------------------------------------------------------------------------
 
 # todo: remove 'db_' prefix
@@ -55,8 +57,8 @@ volumes:
 networks:
   default:
     name: inception
-      #  labels:
-      #    com.docker.compose.project: "inception"
+# labels:
+#   com.docker.compose.project: "inception"
 
 # secrets:
 # configs:
@@ -82,6 +84,11 @@ networks:
 # About env
 # https://docs.docker.com/compose/environment-variables/
 # https://docs.docker.com/compose/compose-file/compose-file-v3/#env_file
+# https://vsupalov.com/docker-arg-env-variable-guide/
+
+# About secrets (not needed _at all_ by the subject)
+# https://docs.docker.com/engine/swarm/secrets/
+# https://www.rockyourcode.com/using-docker-secrets-with-docker-compose/
 
 # TODO
 # on host, set owner for docker volumes (systemd-resolve:systemd-journal by default)

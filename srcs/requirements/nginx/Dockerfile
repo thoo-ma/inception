@@ -23,14 +23,14 @@ COPY conf/nginx.conf /etc/nginx/conf.d
 # RUN chown -R nginx:nginx /var/www;
 
 # cf. https://stackoverflow.com/a/23038211
+# TODO (?) generate certificate on host machine
 RUN openssl req \
     -x509 \
     -nodes \
     -sha256 \
     -days 365 \
     -newkey rsa:4096 \
-    #-out /etc/ssl/certs/trobin.42.fr.crt \
-    -out ${SSL_CERTIFICATE} \
+    -out /etc/ssl/certs/trobin.42.fr.crt \
     -keyout /etc/ssl/private/trobin.42.fr.key \
     -subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=trobin/CN=trobin.42.fr/"
 
@@ -42,4 +42,4 @@ EXPOSE 443
 
 # On pause for the moment to run in interactive mode (cf. Makefile)
 # CMD ["nginx", "-g", "daemon off;"]
-# ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -83,14 +83,12 @@ COPY conf/* /scripts/
 RUN chmod +x /scripts/*.sh
 RUN ./scripts/conf.sh
 
-#RUN echo $MYSQL_ROOT_PASSWORD
-
 # -------- Network ----------------------------------------------------------- #
 
-#EXPOSE 3306
+# cf. https://stackoverflow.com/questions/22111060/
+EXPOSE 3306
 
 # -------- Entrypoint -------------------------------------------------------- #
 
-# Start mysql server as process 1 (IS IT A GOOD IDEA ?...)
-# CMD ["mysqld"]
 # CMD ["mysqld", "--log-bin=mysqld-bin"]
+ENTRYPOINT ["mysqld", "--log-bin=mysqld-bin"]
