@@ -12,8 +12,8 @@ services:
 #       mode: host
     expose:
       - "9000"
-    volumes:
-      - db_wordpress:/var/www/inception
+        #volumes:
+      #      - wordpress:/var/www/inception
 #   restart: always
     env_file: .env
   wordpress: # ----------------------------------------------------------------
@@ -30,24 +30,22 @@ services:
     build: requirements/mariadb
     container_name: mariadb
     volumes:
-      - db_mariadb:/var/lib/mysql
-    # - db_mariadb:$(MYSQL_DATA_DIRECTORY)
+      - mariadb:/var/lib/mysql
+    # - mariadb:$(MYSQL_DATA_DIRECTORY)
     expose:
       - "3306"
-#   environment:
-#     MYSQL_ROOT_PASSWORD: $(MYSQL_ROOT_PASSWORD)
+    env_file: .env
 #   restart: always
 # -----------------------------------------------------------------------------
 
-# todo: remove 'db_' prefix
 volumes:
-  db_wordpress:
-    driver: local # local-persist (?)
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/trobin/data/wordpress
-  db_mariadb:
+  #  wordpress:
+  #    driver: local # local-persist (?)
+  #    driver_opts:
+  #      type: none
+  #      o: bind
+  #      device: /home/trobin/data/wordpress
+  mariadb:
     driver: local # local-persist (?)
     driver_opts:
       type: none

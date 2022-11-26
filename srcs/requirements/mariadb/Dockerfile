@@ -91,4 +91,5 @@ EXPOSE 3306
 # -------- Entrypoint -------------------------------------------------------- #
 
 # CMD ["mysqld", "--log-bin=mysqld-bin"]
-ENTRYPOINT ["mysqld", "--log-bin=mysqld-bin"]
+ENTRYPOINT ["mysqld"]
+#ENTRYPOINT ["mysqld", "--log-bin=mysqld-bin"]

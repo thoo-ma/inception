@@ -13,7 +13,7 @@ mysqld --user=mysql &
 # wait $PID
 # ```
 # Unfortunately, previous command never ends ! (Server is started though.)
-sleep 15
+sleep 20
 
 # Run mysql_secure_installation
 ./scripts/secure_mysql_installation.sh
@@ -24,19 +24,19 @@ mysqladmin version
 # Just to see mandatory databases (`mysql`, `information_schema`, etc.)
 mysqlshow
 
-# TODO Create inception database 
-
-# Grant remote acces to wordpress container
+# Create inception database if not already done
 # TODO use .env variables (for password and hostname)
 # TODO add user called trobin into wordpress container
+# TODO substitute 'wordpress' to 'localhost'
+if ! mysqlshow | grep inception ; then
+    mysql --user=root --password=pass --execute "CREATE DATABASE inception;"
+       # GRANT ALL ON inception to 'root'@'localhost' IDENTIFIED BY 'pass'; \
+       # FLUSH PRIVILEGES;"
+fi
+
 #mysql --user="root" \
 #      --execute "use mysql; \
 #                 GRANT ALL ON *.* to 'root'@'wordpress' IDENTIFIED BY 'pass'; \
-#                 FLUSH PRIVILEGES;"
-
-#mysql --user="root" \
-#      --execute "CREATE DATABASE inception; \
-#                 GRANT ALL ON inception to 'root'@'wordpress' IDENTIFIED BY 'pass'; \
 #                 FLUSH PRIVILEGES;"
 
 # -----------------------------------------------------------------------------

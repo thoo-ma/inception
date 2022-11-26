@@ -18,7 +18,7 @@ RUN wget -O php-wpcli_0.14.0_all.deb \
     https://github.com/wp-cli/builds/blob/gh-pages/deb/php-wpcli_0.14.0_all.deb?raw=true \
     && dpkg -i php-wpcli_0.14.0_all.deb
 
-# Download wp-cli tab completion
+# Download wp-cli tab completion (optional)
 RUN wget -O wp-completion.bash \
     https://raw.githubusercontent.com/wp-cli/wp-cli/v2.7.1/utils/wp-completion.bash \
     && echo "source /tmp/wp-completion.bash" >> ~/.bashrc \

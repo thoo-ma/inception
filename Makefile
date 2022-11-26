@@ -8,13 +8,16 @@ mariadb_volume:		;	mkdir -p $(mariadb_volume)
 wordpress_volume:	;	mkdir -p $(wordpress_volume)
 volumes:				nginx_volume mariadb_volume wordpress_volume
 
+# subst in target dependency doesn't work now.
+# need to crete volume folders by hand.
+
 %_up:					$(subst _up,_volume,$@)
 						cd $(docker_compose_dir) \
 						&& docker compose up $(subst _up,,$@) --build --detach
 
 %_inspect:				$(subst _inspect,_up,$@)
 						cd $(docker_compose_dir) \
-						&& docker compose exec $(subst _inspect,,$@) /bin/bash
+						&& docker compose exec $(subst _inspect,,$@) /bin/bash # --user trobin
 
 %_stop:				;	cd $(docker_compose_dir) \
 						&& docker compose stop $(subst _stop,,$@)
@@ -22,6 +25,9 @@ volumes:				nginx_volume mariadb_volume wordpress_volume
 %_rm:					# $(subst _rm,_stop,$@)
 						cd $(docker_compose_dir) \
 						&& docker compose rm $(subst _rm,,$@)
+
+%_log:				;	cd $(docker_compose_dir) \
+						&& docker compose logs $(subst _log,,$@)
 
 stop:					nginx_stop mariadb_stop wordpress_stop
 rm:						nginx_rm mariadb_rm wordpress_rm
