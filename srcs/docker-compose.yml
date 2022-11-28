@@ -2,7 +2,12 @@ version: "3.8"
 
 services:
   nginx: # --------------------------------------------------------------------
-    build: requirements/nginx
+    build:
+      context: requirements/nginx # https://stackoverflow.com/a/35260151
+      args:
+        domain_name: $DOMAIN_NAME
+        ssl_crt: $SSL_CERTIFICATE
+        ssl_key: $SSL_CERTIFICATE_KEY
     container_name: nginx
     ports:
       - "443:443" # host_port:container_port
@@ -15,7 +20,6 @@ services:
         #volumes:
       #      - wordpress:/var/www/inception
 #   restart: always
-    env_file: .env
   wordpress: # ----------------------------------------------------------------
     build: requirements/wordpress
     container_name: wordpress
@@ -58,7 +62,6 @@ networks:
 # labels:
 #   com.docker.compose.project: "inception"
 
-# secrets:
 # configs:
 # name: "inception"
 

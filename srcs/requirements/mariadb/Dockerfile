@@ -7,13 +7,10 @@ From debian:buster
 # cf. https://dev.mysql.com/doc/refman/8.0/en/changing-mysql-user.html
 # cf. https://dev.mysql.com/doc/refman/8.0/en/server-options.html
 # cf. https://dev.mysql.com/doc/refman/8.0/en/mysqld-safe.html
+# cf. http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/
 
 # Authentication
 # cf. https://dba.stackexchange.com/a/209520
-
-# Miscellaneous
-# cf. https://docs.docker.com/storage/volumes/
-# cf. http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/
 
 # -------- Installation ------------------------------------------------------ #
 
@@ -60,7 +57,7 @@ ARG server_config=/etc/mysql/mariadb.conf.d/50-server.cnf
 # mysql server/daemon will _always_ start from mysql host user
 RUN sed -i -e 's/^#user\s*=\s*mysql/user = mysql/' $server_config
 
-# Add ed25519 authentication plugin
+# Enable ed25519 authentication plugin (already installed at `/usr/lib/mysql/plugin/`)
 # cf. https://mariadb.com/kb/en/authentication-plugin-ed25519/
 # cf. https://mariadb.com/kb/en/authentication-plugin-unix-socket/
 # RUN sed -i -e '/^\[mariadb\]$/a plugin_load_add = auth_ed25519' $server_config

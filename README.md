@@ -63,3 +63,5 @@ List all mysql users: `SELECT User, Host, Password FROM mysql.user;`
 List all mysql databases: `SHOW DATABASES;`
 
 List all listening ports: `netstat -tulpn | grep LISTEN`
+
+Show user grants: `SHOW GRANTS FOR 'username'@'hostname';`

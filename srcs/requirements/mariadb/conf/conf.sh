@@ -19,25 +19,20 @@ sleep 20
 ./scripts/secure_mysql_installation.sh
 
 # Ensure that mysql server is running
-mysqladmin version
-
-# Just to see mandatory databases (`mysql`, `information_schema`, etc.)
-mysqlshow
+# mysqladmin version
 
 # Create inception database if not already done
 # TODO use .env variables (for password and hostname)
 # TODO add user called trobin into wordpress container
 # TODO substitute 'wordpress' to 'localhost'
 if ! mysqlshow | grep inception ; then
-    mysql --user=root --password=pass --execute "CREATE DATABASE inception;"
-       # GRANT ALL ON inception to 'root'@'localhost' IDENTIFIED BY 'pass'; \
-       # FLUSH PRIVILEGES;"
+    mysql --user=root --password=$(MYSQL_ROOT_PASSWORD) --execute "CREATE DATABASE inception;"
+#    GRANT ALL PRIVILEGES ON inception.* to 'root'@'localhost' IDENTIFIED BY '$(MYSQL_ROOT_PASSWORD)'; \
+#    FLUSH PRIVILEGES;"
 fi
 
-#mysql --user="root" \
-#      --execute "use mysql; \
-#                 GRANT ALL ON *.* to 'root'@'wordpress' IDENTIFIED BY 'pass'; \
-#                 FLUSH PRIVILEGES;"
+# ??
+# mysqld --user=mysql -s stop
 
 # -----------------------------------------------------------------------------
 

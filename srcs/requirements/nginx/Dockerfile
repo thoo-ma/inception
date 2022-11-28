@@ -1,8 +1,9 @@
-# todo: use env variables
 # curl -k https://trobin.42.fr
 # curl -k https://localhost:443
 
 FROM debian:buster
+
+ARG domain_name ssl_crt ssl_key
 
 # note some packages are for testing purpose only (curl, procps, vim, lynx)
 RUN apt-get update && apt-get install -y nginx openssl curl procps vim gettext # lynx
@@ -30,9 +31,12 @@ RUN openssl req \
     -sha256 \
     -days 365 \
     -newkey rsa:4096 \
-    -out /etc/ssl/certs/trobin.42.fr.crt \
-    -keyout /etc/ssl/private/trobin.42.fr.key \
-    -subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=trobin/CN=trobin.42.fr/"
+    -out $ssl_crt \
+    -keyout $ssl_key \
+    -subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=trobin/CN=$domain_name/"
+
+# RUN useradd trobin
+# USER trobin
 
 # cf. https://stackoverflow.com/questions/22111060/
 EXPOSE 443
@@ -40,6 +44,4 @@ EXPOSE 443
 # Doesn't work cause we not root here
 # RUN echo '127.0.0.1 localhost trobin.42.fr' >> /etc/hosts
 
-# On pause for the moment to run in interactive mode (cf. Makefile)
-# CMD ["nginx", "-g", "daemon off;"]
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
