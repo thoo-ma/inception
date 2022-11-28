@@ -6,28 +6,28 @@ docker_compose_dir	=	/home/trobin/inception/srcs
 nginx_volume:		;	mkdir -p $(wordpress_volume)
 mariadb_volume:		;	mkdir -p $(mariadb_volume)
 wordpress_volume:	;	mkdir -p $(wordpress_volume)
-volumes:				nginx_volume mariadb_volume wordpress_volume
 
-# subst in target dependency doesn't work now.
-# need to crete volume folders by hand.
-
-%_up:					$(subst _up,_volume,$@)
+%_up:					%_volume
 						cd $(docker_compose_dir) \
-						&& docker compose up $(subst _up,,$@) --build --detach
+						&& docker compose up $* --build --detach
 
-%_inspect:				$(subst _inspect,_up,$@)
-						cd $(docker_compose_dir) \
-						&& docker compose exec $(subst _inspect,,$@) /bin/bash # --user trobin
+%_inspect:			;	cd $(docker_compose_dir) \
+						&& docker compose exec $* /bin/bash # --user trobin
 
 %_stop:				;	cd $(docker_compose_dir) \
-						&& docker compose stop $(subst _stop,,$@)
-
-%_rm:					# $(subst _rm,_stop,$@)
-						cd $(docker_compose_dir) \
-						&& docker compose rm $(subst _rm,,$@)
+						&& docker compose stop $*
 
 %_log:				;	cd $(docker_compose_dir) \
-						&& docker compose logs $(subst _log,,$@)
+						&& docker compose logs $*
+
+%_clean:				%_stop
+						cd $(docker_compose_dir) \
+						&& docker system prune \
+						&& docker compose rm $* \
+						&& sudo rm -rf $(mariadb_volume)/*
 
 stop:					nginx_stop mariadb_stop wordpress_stop
-rm:						nginx_rm mariadb_rm wordpress_rm
+clean:					nginx_clean mariadb_clean wordpress_clean
+volumes:				nginx_volume mariadb_volume wordpress_volume
+
+.SECONDEXPANSION:
