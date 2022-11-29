@@ -31,7 +31,10 @@ services:
 #       condition: service_started # service_ [ started | healthy | completed_successfully ]
 #   restart: always
   mariadb: # ------------------------------------------------------------------
-    build: requirements/mariadb
+    build:
+      context: requirements/mariadb
+      args:
+        mysql_root_password: $MYSQL_ROOT_PASSWORD
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql

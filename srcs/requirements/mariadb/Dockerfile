@@ -20,7 +20,6 @@ RUN apt-get install -y vim
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y tree
-RUN apt-get install -y tree
 #RUN apt-get install -y net-tools # netstat
 #RUN apt-get install -y apt-utils
 
@@ -78,7 +77,8 @@ RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' $server_
 # More config with this script
 COPY conf/* /scripts/
 RUN chmod +x /scripts/*.sh
-RUN ./scripts/conf.sh
+ARG mysql_root_password
+RUN export MYSQL_ROOT_PASSWORD=$mysql_root_password && ./scripts/conf.sh
 
 # -------- Network ----------------------------------------------------------- #
 
@@ -87,6 +87,5 @@ EXPOSE 3306
 
 # -------- Entrypoint -------------------------------------------------------- #
 
-# CMD ["mysqld", "--log-bin=mysqld-bin"]
 ENTRYPOINT ["mysqld"]
 #ENTRYPOINT ["mysqld", "--log-bin=mysqld-bin"]

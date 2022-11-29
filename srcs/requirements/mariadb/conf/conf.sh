@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# -----------------------------------------------------------------------------
-
 # Start mysql server with mysql host user
 mysqld --user=mysql &
 
@@ -22,27 +20,14 @@ sleep 20
 # mysqladmin version
 
 # Create inception database if not already done
-# TODO use .env variables (for password and hostname)
-# TODO add user called trobin into wordpress container
-# TODO substitute 'wordpress' to 'localhost'
+# TODO (?) substitute 'trobin'@'wordpress' to 'root'@'localhost
 if ! mysqlshow | grep inception ; then
-    mysql --user=root --password=$(MYSQL_ROOT_PASSWORD) --execute "CREATE DATABASE inception;"
-#    GRANT ALL PRIVILEGES ON inception.* to 'root'@'localhost' IDENTIFIED BY '$(MYSQL_ROOT_PASSWORD)'; \
-#    FLUSH PRIVILEGES;"
+    mysql --user=root --password=$(MYSQL_ROOT_PASSWORD) --execute "CREATE DATABASE inception; \
+    GRANT ALL PRIVILEGES ON inception.* to 'root'@'localhost' IDENTIFIED BY '$(MYSQL_ROOT_PASSWORD)'; \
+    FLUSH PRIVILEGES;"
 fi
 
-# ??
-# mysqld --user=mysql -s stop
-
-# -----------------------------------------------------------------------------
-
 # TODO
-
 # Setup `ed25519` authentication plugin
-# (Hoping that, while logged as root on server/daemon host machine,
-# i.e. mariadb container, trying to connect with
-# `mysql -u root -p` with wrong password won't let us get in !...)
-
 # change mysql root user name
-
-# -----------------------------------------------------------------------------
+# (?) mysqld --user=mysql -s stop
