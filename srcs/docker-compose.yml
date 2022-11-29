@@ -17,8 +17,8 @@ services:
 #       mode: host
     expose:
       - "9000"
-        #volumes:
-      #      - wordpress:/var/www/inception
+    volumes:
+      - wordpress:/var/www/inception
 #   restart: always
   wordpress: # ----------------------------------------------------------------
     build: requirements/wordpress
@@ -43,12 +43,12 @@ services:
 # -----------------------------------------------------------------------------
 
 volumes:
-  #  wordpress:
-  #    driver: local # local-persist (?)
-  #    driver_opts:
-  #      type: none
-  #      o: bind
-  #      device: /home/trobin/data/wordpress
+  wordpress:
+    driver: local # local-persist (?)
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/trobin/data/wordpress
   mariadb:
     driver: local # local-persist (?)
     driver_opts:

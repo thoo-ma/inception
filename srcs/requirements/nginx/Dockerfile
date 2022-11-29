@@ -8,16 +8,15 @@ ARG domain_name ssl_crt ssl_key
 # note some packages are for testing purpose only (curl, procps, vim, lynx)
 RUN apt-get update && apt-get install -y nginx openssl curl procps vim gettext # lynx
 
-# note that into `/etc/nginx/nginx.conf`, http context has
-# the following directive: include /etc/nginx/conf.d/*.conf
-COPY conf/nginx.conf /etc/nginx/conf.d
-
-# COPY conf/nginx.conf.template /tmp/nginx.conf.template
-# RUN envsubst < /tmp/nginx.conf.template > /etc/nginx/conf.d/nginx.conf
-# RUN /bin/bash -c source /home/trobin/inception/srcs/.env \
-#    && envsubst < /tmp/template > /etc/nginx/conf.d/nginx.conf
-# RUN /bin/bash -c echo $DOMAIN_NAME > /tmp/domain
-# RUN echo $DOMAIN_NAME >> /tmp/domain
+# Generate nginx.conf from template
+# cf. https://stackoverflow.com/a/57891894d
+COPY conf/nginx.conf.template /tmp/nginx.conf.template
+RUN export DOMAIN_NAME=$domain_name \
+    && export SSL_CERTIFICATE=$ssl_crt \
+    && export SSL_CERTIFICATE_KEY=$ssl_key \
+    && envsubst '$DOMAIN_NAME $SSL_CERTIFICATE $SSL_CERTIFICATE_KEY' \
+    < /tmp/nginx.conf.template > /etc/nginx/conf.d/nginx.conf
+# COPY conf/nginx.conf /etc/nginx/conf.
 
 # What to do with this ?...
 # RUN chown -R www-data:www-data /var/www;

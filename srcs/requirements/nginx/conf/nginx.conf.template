@@ -10,13 +10,11 @@ server {
 
     location / {
         autoindex on;
-        # cf. https://stackoverflow.com/a/57891894
-        # to see how not substitute these '$'
-        #    try_files $uri $uri/ =404;
+        try_files $uri $uri/ =404;
     }
 
     ssl_protocols TLSv1.3;
-    ssl_certificate ${SSL_CERTIFICATE};
-    ssl_certificate_key ${SSL_CERTIFICATE_KEY};
+    ssl_certificate $SSL_CERTIFICATE;
+    ssl_certificate_key $SSL_CERTIFICATE_KEY;
 
 }
