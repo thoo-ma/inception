@@ -65,3 +65,7 @@ List all mysql databases: `SHOW DATABASES;`
 List all listening ports: `netstat -tulpn | grep LISTEN`
 
 Show user grants: `SHOW GRANTS FOR 'username'@'hostname';`
+
+Connect to nginx service from host machine: `curl -k https://localhost`
+
+Connect to nginx service from other service: `curl -k https://nginx`

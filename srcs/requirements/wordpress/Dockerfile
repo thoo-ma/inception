@@ -29,4 +29,5 @@ RUN wget -O wp-completion.bash \
 #RUN mkdir -p /home/trobin/data/mariadb
 #RUN chown -R mysql:mysql /home/trobin/data/mariadb
 
-SHELL ["/bin/bash", "source", "~/.bashrc" ]
+# temporary
+ENTRYPOINT ["sleep", "infinity"]

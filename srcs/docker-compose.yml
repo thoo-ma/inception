@@ -41,10 +41,8 @@ services:
     # - mariadb:$(MYSQL_DATA_DIRECTORY)
     expose:
       - "3306"
-    env_file: .env
 #   restart: always
 # -----------------------------------------------------------------------------
-
 volumes:
   wordpress:
     driver: local # local-persist (?)
@@ -58,10 +56,11 @@ volumes:
       type: none
       o: bind
       device: /home/trobin/data/mariadb
-
+# -----------------------------------------------------------------------------
 networks:
   default:
     name: inception
+# -----------------------------------------------------------------------------
 # labels:
 #   com.docker.compose.project: "inception"
 

@@ -11,7 +11,7 @@ wordpress_volume:	;	mkdir -p $(wordpress_volume)
 						cd $(docker_compose_dir) \
 						&& docker compose up $* --build --detach
 
-%_inspect:			;	cd $(docker_compose_dir) \
+%_it:				;	cd $(docker_compose_dir) \
 						&& docker compose exec $* /bin/bash # --user trobin
 
 %_stop:				;	cd $(docker_compose_dir) \
@@ -24,7 +24,6 @@ wordpress_volume:	;	mkdir -p $(wordpress_volume)
 						cd $(docker_compose_dir) \
 						&& docker system prune \
 						&& docker compose rm $* \
-						&& sudo rm -rf $(mariadb_volume)/*
 
 stop:					nginx_stop mariadb_stop wordpress_stop
 clean:					nginx_clean mariadb_clean wordpress_clean
