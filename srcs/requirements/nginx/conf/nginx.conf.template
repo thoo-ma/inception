@@ -3,14 +3,22 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    root /var/www/inception;
-    index index.html;
+    root /var/www/inception/public_html;
+    index index.php;
 
     server_name $DOMAIN_NAME;
 
     location / {
         autoindex on;
         try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        fastcgi_index   index.php;
+        fastcgi_pass    wordpress:9000;
+        include         fastcgi_params;
+        fastcgi_param   REQUEST_METHOD $request_method;
+        fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
     ssl_protocols TLSv1.3;

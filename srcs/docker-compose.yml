@@ -9,6 +9,7 @@ services:
         ssl_crt: $SSL_CERTIFICATE
         ssl_key: $SSL_CERTIFICATE_KEY
     container_name: nginx
+    # host_name: nginx
     ports:
       - "443:443" # host_port:container_port
 #     - target: 443 # container port
@@ -19,16 +20,33 @@ services:
       - "9000"
     volumes:
       - wordpress:/var/www/inception
+    depends_on:
+      wordpress:
+        condition: service_started # service_ [ started | healthy | completed_successfully ]
 #   restart: always
   wordpress: # ----------------------------------------------------------------
-    build: requirements/wordpress
+    build:
+      context: requirements/wordpress
+      args:
+        db_host: $DB_HOST
+        db_name: $DB_NAME
+        db_user: $DB_USER
+        db_pass: $DB_PASS
+        wp_url: $WP_URL
+        wp_title: $WP_TITLE
+        wp_admin_user: $WP_ADMIN_USER
+        wp_admin_pass: $WP_ADMIN_PASS
+        wp_admin_mail: $WP_ADMIN_MAIL
     container_name: wordpress
+    # host_name: wordpress
     expose:
       - "3306"
       - "9000"
-#   depends_on:
-#     mariadb:
-#       condition: service_started # service_ [ started | healthy | completed_successfully ]
+    depends_on:
+      mariadb:
+        condition: service_started # service_ [ started | healthy | completed_successfully ]
+    volumes:
+      - wordpress:/var/www/inception
 #   restart: always
   mariadb: # ------------------------------------------------------------------
     build:
@@ -36,6 +54,7 @@ services:
       args:
         mysql_root_password: $MYSQL_ROOT_PASSWORD
     container_name: mariadb
+    # host_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
     # - mariadb:$(MYSQL_DATA_DIRECTORY)
@@ -49,13 +68,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/trobin/data/wordpress
+      device: /home/youngbenjaminhorne/data/wordpress
   mariadb:
     driver: local # local-persist (?)
     driver_opts:
       type: none
       o: bind
-      device: /home/trobin/data/mariadb
+      device: /home/youngbenjaminhorne/data/mariadb
 # -----------------------------------------------------------------------------
 networks:
   default:

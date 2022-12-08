@@ -20,7 +20,8 @@ RUN apt-get install -y vim
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y tree
-#RUN apt-get install -y net-tools # netstat
+RUN apt-get install -y net-tools # netstat
+RUN apt-get install -y lsof
 #RUN apt-get install -y apt-utils
 
 # /!\ LTS FTW /!\

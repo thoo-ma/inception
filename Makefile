@@ -1,11 +1,16 @@
 mariadb_volume		=	/home/trobin/data/mariadb
-wordpress_volume	=	/home/trobin/data/wordpress
+wordpress_volume	=	/home/trobin/data/wordpress/public_html
 docker_compose_dir	=	/home/trobin/inception/srcs
 
 #nginx_volume:		;
 nginx_volume:		;	mkdir -p $(wordpress_volume)
 mariadb_volume:		;	mkdir -p $(mariadb_volume)
 wordpress_volume:	;	mkdir -p $(wordpress_volume)
+
+
+all: 					volumes
+						cd $(docker_compose_dir) \
+						&& docker compose up --build --detach
 
 %_up:					%_volume
 						cd $(docker_compose_dir) \
@@ -25,6 +30,13 @@ wordpress_volume:	;	mkdir -p $(wordpress_volume)
 						&& docker system prune \
 						&& docker compose rm $* \
 
+fclean:					clean
+						docker volume rm inception_mariadb
+						docker volume rm inception_wordpress
+						sudo rm -rf $(mariadb_volume)/*
+						sudo rm -rf $(wordpress_volume)/*
+
+re:						fclean all
 stop:					nginx_stop mariadb_stop wordpress_stop
 clean:					nginx_clean mariadb_clean wordpress_clean
 volumes:				nginx_volume mariadb_volume wordpress_volume

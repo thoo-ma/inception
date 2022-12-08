@@ -3,31 +3,57 @@ FROM debian:buster
 # cf. https://www.linode.com/docs/guides/how-to-install-wordpress-using-wp-cli-on-debian-10/
 # cf. https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/
 
-#RUN apt-get install -y php php-mysql php-fpm wp-cli
 RUN apt-get update
-RUN apt-get install -y php # version 7.3
-RUN apt-get install -y wordpress
 RUN apt-get install -y wget
-RUN apt-get install -y vim
+RUN apt-get install -y vim # ??
+RUN apt-get install -y curl # ??
 RUN apt-get install -y less # needed by wp-cli (https://github.com/wp-cli/wp-cli/issues/5333)
+RUN apt-get install -y lsb-release
+RUN apt-get install -y ca-certificates
+RUN apt-get install -y apt-transport-https
+RUN apt-get install -y mariadb-client
+RUN apt-get install -y net-tools # netstat
+RUN apt-get install -y lsof
 
+# Install php8.1 (LTS)
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+RUN apt-get update
+RUN apt-get install -y php8.1
+RUN apt-get install -y php8.1-fpm
+RUN apt-get install -y php8.1-curl # ??
+RUN apt-get install -y php8.1-mysql
+RUN apt-get install -y sendmail # needed by wordpress config
+
+# Download wp-cli (GENERIC WAY)
 WORKDIR /tmp
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
-# Download wp-cli
-RUN wget -O php-wpcli_0.14.0_all.deb \
-    https://github.com/wp-cli/builds/blob/gh-pages/deb/php-wpcli_0.14.0_all.deb?raw=true \
-    && dpkg -i php-wpcli_0.14.0_all.deb
+ARG db_host \
+	db_name \
+    db_user \
+    db_pass \
+    wp_url \
+    wp_title \
+    wp_admin_user \
+    wp_admin_pass \
+    wp_admin_mail
 
-# Download wp-cli tab completion (optional)
-RUN wget -O wp-completion.bash \
-    https://raw.githubusercontent.com/wp-cli/wp-cli/v2.7.1/utils/wp-completion.bash \
-    && echo "source /tmp/wp-completion.bash" >> ~/.bashrc \
-    && echo "alias wp='wp --allow-root'" >> ~/.bashrc # tmp
+ENV	DB_HOST=$db_host \
+	DB_NAME=$db_name \
+	DB_USER=$db_user \
+	DB_PASS=$db_pass \
+    WP_URL=$wp_url \
+    WP_TITLE=$wp_title \
+    WP_ADMIN_USER=$wp_admin_user \
+    WP_ADMIN_PASS=$wp_admin_pass \
+    WP_ADMIN_MAIL=$wp_admin_mail
 
-# Create the wordpress database (assume mariadb container is running)
-# (SHOULD persist even if the corresponding docker volume is deleted!)
-#RUN mkdir -p /home/trobin/data/mariadb
-#RUN chown -R mysql:mysql /home/trobin/data/mariadb
+COPY conf/configure.sh /scripts/configure.sh
+RUN chmod +x /scripts/configure.sh
 
-# temporary
-ENTRYPOINT ["sleep", "infinity"]
+WORKDIR /var/www/inception/public_html
+
+ENTRYPOINT ["/scripts/configure.sh"]
