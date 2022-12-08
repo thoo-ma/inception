@@ -42,13 +42,17 @@
 
 [About mariadb.sys user](https://www.thegeekdiary.com/what-is-the-purpose-of-mysql-syslocalhost-user/)
 
-## To do on host machine before anything else
+## On host machine
 
-1. add `127.0.0.1 localhost trobin.42.fr` to `/etc/hosts`
+### To access wordpress from domaine name:
 
-2. put some `index.html` into `/home/trobin/data/www`
+```
+echo '127.0.0.1 localhost trobin.42.fr' >> '/etc/hosts'
+```
 
-3. use docker without sudo (optionnal)
+N.B: `/etc/hosts` equivalent on Windows is `C:\Windows\System32\drivers\etc\hosts`
+
+### To use docker without sudo
 
 ```
 sudo groupadd docker && \
