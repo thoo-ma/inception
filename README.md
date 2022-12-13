@@ -73,3 +73,9 @@ Show user grants: `SHOW GRANTS FOR 'username'@'hostname';`
 Connect to nginx service from host machine: `curl -k https://localhost`
 
 Connect to nginx service from other service: `curl -k https://nginx`
+
+Display user and host for current mysql session: `mysql> select user();`
+
+Display data stored into a table: `SELECT * FROM table_name;`
+
+Access wordpress administration dashboard: `https://example.com/wp-admin`

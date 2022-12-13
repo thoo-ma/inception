@@ -1,5 +1,9 @@
 #!/usr/bin/expect
 
+# Syntax and order of the questions depends on mariadb version.
+# Be careful to edit this file when mariadb version is updated.
+# Now this script is compliant with version 10.6 (LTS).
+
 set yes  "y\n"
 set no   "n\n"
 set enter "\n"

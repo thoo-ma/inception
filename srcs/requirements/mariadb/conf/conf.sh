@@ -20,8 +20,12 @@ sleep 20
 # mysqladmin version
 
 # Create inception database if not already done
+# TODO remove root access
 if ! mysqlshow | grep inception ; then
     mysql --user=root --password=$MYSQL_ROOT_PASSWORD --execute "CREATE DATABASE inception; \
+    CREATE USER 'trobin'@'wordpress.inception' IDENTIFIED BY 'trobin'; \
+    GRANT ALL PRIVILEGES ON inception.* to 'trobin'@'wordpress.inception' IDENTIFIED BY 'trobin'; \
+    FLUSH PRIVILEGES; \
     GRANT ALL PRIVILEGES ON inception.* to 'root'@'wordpress.inception' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD'; \
     FLUSH PRIVILEGES;"
 fi

@@ -1,3 +1,5 @@
-1. when we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
-2. handle correctyl users and permissions (www-data, nginx, trobin)
-4. add host_name into docker-composse.yml
+- when we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
+- handle correctyl users and permissions (www-data, nginx, trobin)
+- add host_name into docker-composse.yml
+- change wordpress admin username and password
+- healthcheck plugin wordpress

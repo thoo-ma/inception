@@ -19,7 +19,7 @@ RUN apt-get install -y expect
 RUN apt-get install -y vim
 RUN apt-get install -y curl
 RUN apt-get install -y ca-certificates
-RUN apt-get install -y tree
+RUN apt-get install -y tree # remove
 RUN apt-get install -y net-tools # netstat
 RUN apt-get install -y lsof
 #RUN apt-get install -y apt-utils
@@ -69,6 +69,21 @@ RUN sed -i -e 's/^#user\s*=\s*mysql/user = mysql/' $server_config
 
 # For mysql server/daemon to be accessible from anywhere (not only localhost i.e. this container)
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' $server_config
+
+# TODO remove (only for testing/debugging)
+RUN sed -i -e 's/^#general_log_file\s*=\s*\/var\/log\/mysql\/mysql.log/general_log_file = \/var\/log\/mysql\/mysql.log/' $server_config
+# RUN uncomment $logfile $server_config
+
+# TODO remove (only for testing/debugging)
+RUN sed -i -e 's/^#general_log\s*=\s*1/general_log = 1/' $server_config
+# RUN uncomment $log $server_config
+
+# TODO remove (only for testing/debugging)
+RUN sed -i -e 's/^#log_error\s*=\s*\/var\/log\/mysql\/error.log/log_error = \/var\/log\/mysql\/error.log/' $server_config
+# RUN uncomment $log_error $server_config
+
+# TODO remove (only for testing/debugging)
+RUN sed -i '/^\[mariadb\]/a log_warnings=4'  $server_config
 
 # /!\ DELETE /!\
 # RUN cat /etc/passwd | grep mysql | awk -F ':' '{ print $7 }'

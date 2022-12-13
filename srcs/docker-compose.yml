@@ -9,7 +9,7 @@ services:
         ssl_crt: $SSL_CERTIFICATE
         ssl_key: $SSL_CERTIFICATE_KEY
     container_name: nginx
-    # host_name: nginx
+    hostname: nginx
     ports:
       - "443:443" # host_port:container_port
 #     - target: 443 # container port
@@ -32,13 +32,14 @@ services:
         db_name: $DB_NAME
         db_user: $DB_USER
         db_pass: $DB_PASS
+        db_prefix: $DB_PREFIX
         wp_url: $WP_URL
         wp_title: $WP_TITLE
         wp_admin_user: $WP_ADMIN_USER
         wp_admin_pass: $WP_ADMIN_PASS
         wp_admin_mail: $WP_ADMIN_MAIL
     container_name: wordpress
-    # host_name: wordpress
+    hostname: wordpress
     expose:
       - "3306"
       - "9000"
@@ -54,10 +55,9 @@ services:
       args:
         mysql_root_password: $MYSQL_ROOT_PASSWORD
     container_name: mariadb
-    # host_name: mariadb
+    hostname: mariadb
     volumes:
-      - mariadb:/var/lib/mysql
-    # - mariadb:$(MYSQL_DATA_DIRECTORY)
+      - mariadb:$MYSQL_DATA_DIRECTORY
     expose:
       - "3306"
 #   restart: always

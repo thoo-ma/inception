@@ -35,6 +35,7 @@ ARG db_host \
 	db_name \
     db_user \
     db_pass \
+    db_prefix \
     wp_url \
     wp_title \
     wp_admin_user \
@@ -45,6 +46,7 @@ ENV	DB_HOST=$db_host \
 	DB_NAME=$db_name \
 	DB_USER=$db_user \
 	DB_PASS=$db_pass \
+	DB_PREFIX=$db_prefix \
     WP_URL=$wp_url \
     WP_TITLE=$wp_title \
     WP_ADMIN_USER=$wp_admin_user \
@@ -52,7 +54,23 @@ ENV	DB_HOST=$db_host \
     WP_ADMIN_MAIL=$wp_admin_mail
 
 COPY conf/configure.sh /scripts/configure.sh
+#RUN chmod +x /scripts/configure.sh
+
+# add
+RUN mkdir -p /run/php
+RUN touch /run/php/php8.1-fpm.pid
+RUN touch /var/log/php8.1-fpm.log
+RUN useradd trobin
+RUN chown trobin:trobin /run/php/php8.1-fpm.pid
+RUN chown trobin:trobin /var/log/php8.1-fpm.log
+RUN sed -i -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini
+RUN sed -i -e 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf
+RUN chown trobin:trobin /scripts/configure.sh
+RUN mkdir -p /var/www/inception && chown -R trobin:trobin /var/www/inception
+USER trobin
 RUN chmod +x /scripts/configure.sh
+RUN chmod 755 /run/php/php8.1-fpm.pid
+RUN chmod 755 /var/log/php8.1-fpm.log
 
 WORKDIR /var/www/inception/public_html
 
