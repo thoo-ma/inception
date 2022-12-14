@@ -45,7 +45,7 @@ RUN apt-get install -y mariadb-common mariadb-server mariadb-client # do we real
 # we will switch from `unix socket` to `ed25519` authentication plugin ?
 RUN mkdir -p /run/mysqld/
 RUN touch /run/mysqld/mysqld.sock
-RUN chmod -R 777 /run/mysqld
+RUN chmod -R 777 /run/mysqld # ??
 RUN chown -R mysql:mysql /run/mysqld
 
 # WORKDIR /etc/mysql/mariadb.conf.d
@@ -93,8 +93,17 @@ RUN sed -i '/^\[mariadb\]/a log_warnings=4'  $server_config
 # More config with this script
 COPY conf/* /scripts/
 RUN chmod +x /scripts/*.sh
-ARG mysql_root_password
-RUN export MYSQL_ROOT_PASSWORD=$mysql_root_password && ./scripts/conf.sh
+
+ARG mysql_root_password \
+	mysql_user_name \
+	mysql_user_pass \
+    db_name
+
+RUN export MYSQL_ROOT_PASSWORD=$mysql_root_password \
+		   MYSQL_USER_NAME=$mysql_user_name \
+		   MYSQL_USER_PASS=$mysql_user_pass \
+           DB_NAME=$db_name \
+           && ./scripts/conf.sh
 
 # -------- Network ----------------------------------------------------------- #
 

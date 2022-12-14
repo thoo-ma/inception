@@ -54,6 +54,9 @@ services:
       context: requirements/mariadb
       args:
         mysql_root_password: $MYSQL_ROOT_PASSWORD
+        mysql_user_name: $MYSQL_USER_NAME
+        mysql_user_pass: $MYSQL_USER_PASS
+        db_name: $DB_NAME
     container_name: mariadb
     hostname: mariadb
     volumes:

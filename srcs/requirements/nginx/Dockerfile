@@ -1,6 +1,3 @@
-# curl -k https://trobin.42.fr
-# curl -k https://localhost:443
-
 FROM debian:buster
 
 RUN apt-get update
@@ -14,8 +11,8 @@ RUN apt-get install -y net-tools # netstat
 RUN apt-get install -y lsof
 # RUN apt-get install -y lynx
 
-# Generate nginx.conf from template
-# cf. https://stackoverflow.com/a/57891894d
+# Generate nginx.conf from template (cf. https://stackoverflow.com/a/57891894d)
+# This is to allow environment variables into (template) config file
 ARG domain_name ssl_crt ssl_key
 COPY conf/nginx.conf.template /tmp/nginx.conf.template
 RUN export DOMAIN_NAME=$domain_name \
@@ -23,19 +20,11 @@ RUN export DOMAIN_NAME=$domain_name \
     && export SSL_CERTIFICATE_KEY=$ssl_key \
     && envsubst '$DOMAIN_NAME $SSL_CERTIFICATE $SSL_CERTIFICATE_KEY' \
     < /tmp/nginx.conf.template > /etc/nginx/conf.d/nginx.conf
-# COPY conf/nginx.conf /etc/nginx/conf.
 
-# What to do with this ?...
-# RUN chown -R www-data:www-data /var/www;
-# RUN chown -R nginx:nginx /var/www;
-
-# cf. /var/log/nginx/error.log
-
-# RUN useradd trobin
-# USER trobin
-
-# cf. https://stackoverflow.com/questions/22111060/
-# EXPOSE 443
+# Doesn't change permissions upon `var/www/inception` because
+# the volume is mounted at the very end of the build process.
+# (It doesn't even exist at this point.)
+RUN chown -R www-data:www-data /var/www;
 
 # cf. https://stackoverflow.com/a/23038211
 # TODO (?) generate certificate on host machine
@@ -48,6 +37,8 @@ RUN openssl req \
     -out $ssl_crt \
     -keyout $ssl_key \
     -subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=trobin/CN=$domain_name/"
+
+# cf. /var/log/nginx/error.log
 
 # ??
 RUN sed -i -e 's/80/9000/' /etc/nginx/sites-enabled/default

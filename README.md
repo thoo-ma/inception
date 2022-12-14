@@ -79,3 +79,5 @@ Display user and host for current mysql session: `mysql> select user();`
 Display data stored into a table: `SELECT * FROM table_name;`
 
 Access wordpress administration dashboard: `https://example.com/wp-admin`
+
+Ensure that mysql server is running: `mysqladmin version`

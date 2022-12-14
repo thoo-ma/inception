@@ -1,20 +1,17 @@
 #!/bin/bash
 
 # ending semicolon is important
-function success () { echo "$1: SUCCESS" >> /tmp/log.txt; }
-function failure () { echo "$1: FAILURE" >> /tmp/log.txt; }
+function success () { echo "$1: SUCCESS" >> /tmp/wp.log; }
+function failure () { echo "$1: FAILURE" >> /tmp/wp.log; }
 
 # Wordpress download
-# TODO delete `--allow-root`
-# if wp core download --allow-root;
 if wp core download;
 	then success "download"
 	else failure "download"
 fi
 
 # Wordpress config
-# TODO delete `--allow-root`
-# TODO delete `--force`
+# TODO (?) delete `--force`
 if wp core config \
     --dbhost=$DB_HOST \
 	--dbname=$DB_NAME \
@@ -27,7 +24,6 @@ if wp core config \
 fi
 
 # Wordpress install
-# TODO delete `--allow-root`
 # This take so much time and doesn't block execution flow ...
 if wp core install \
 	--url=$WP_URL \
@@ -39,37 +35,19 @@ if wp core install \
 	else failure "install"
 fi
 
-#env > /tmp/env
-#unset DB_HOST DB_NAME DB_USER DB_PASS \
+# TODO this doesn't work...
+# env > /tmp/env
+# unset DB_HOST DB_NAME DB_USER DB_PASS \
 #	  WP_URL WP_TITLE WP_ADMIN_USER WP_ADMIN_PASS WP_ADMIN_MAIL
-
-# ?? (related to `include fastcgi_params` into `nginx.conf`)
-# sed -i -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini
-
-# ??
-# sed -i -e 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf
-
-# Wordpress update
-# wp plugin update --all
 
 # debug
 wp config set WP_DEBUG true --raw
 wp config set WP_DEBUG_LOG true --add --raw
 wp config set WP_DEBUG_DISPLAY false --add --raw
-wp config set WP_HOME 'https://trobin.42.fr' --add
-wp config set WP_SITEURL 'https://trobin.42.fr' --add
-# wp config set WP_DEBUG_LOG '/tmp/wp.log' --add --raw
+wp config set WP_HOME "https://$WP_URL" --add
+wp config set WP_SITEURL "https://$WP_URL" --add
+echo "update_option( 'siteurl', "https://$WP_URL" );" >> /var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php
+echo "update_option( 'home', "https://$WP_URL" );" >> /var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php
+sed -i "/define( 'WP_DEBUG_DISPLAY', false );/a @ini_set( 'display_errors', 0 );" /var/www/inception/public_html/wp-config.php
 
-echo "update_option( 'siteurl', 'https://trobin.42.fr' );" >> /var/www/inception/public_html/wp-content/themes/twentytwentyone/functions.php
-echo "update_option( 'home', 'https://trobin.42.fr' );" >> /var/www/inception/public_html/wp-content/themes/twentytwentyone/functions.php
-
-echo "update_option( 'siteurl', 'https://trobin.42.fr' );" >> /var/www/inception/public_html/wp-content/themes/twentytwentytwo/functions.php
-echo "update_option( 'home', 'https://trobin.42.fr' );" >> /var/www/inception/public_html/wp-content/themes/twentytwentytwo/functions.php
-
-echo "update_option( 'siteurl', 'https://trobin.42.fr' );" >> /var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php
-echo "update_option( 'home', 'https://trobin.42.fr' );" >> /var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php
-
-# exec sleep infinity
-# exec php-fpm8.1 -F
-exec php-fpm8.1 -F -c /etc/php/8.1/fpm/php.ini
-# exec php-fpm8.1 --allow-to-run-as-root -F -c /etc/php/8.1/fpm/php.ini
+exec php-fpm8.1 --nodaemonize

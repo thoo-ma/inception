@@ -54,13 +54,10 @@ ENV	DB_HOST=$db_host \
     WP_ADMIN_MAIL=$wp_admin_mail
 
 COPY conf/configure.sh /scripts/configure.sh
-#RUN chmod +x /scripts/configure.sh
-
-# add
 RUN mkdir -p /run/php
 RUN touch /run/php/php8.1-fpm.pid
 RUN touch /var/log/php8.1-fpm.log
-RUN useradd trobin
+RUN useradd trobin # MYSQL_USER_NAME
 RUN chown trobin:trobin /run/php/php8.1-fpm.pid
 RUN chown trobin:trobin /var/log/php8.1-fpm.log
 RUN sed -i -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini
