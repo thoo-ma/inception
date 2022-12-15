@@ -14,17 +14,11 @@
 
 ### Docker
 
-[containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
-
 [docker-curriculum](https://docker-curriculum.com/)
 
-[docker-compose-viz](https://github.com/pmsipilot/docker-compose-viz)
-
-[awesome compose](https://github.com/docker/awesome-compose)
-
-[changing location of docker volumes](https://dbafromthecold.com/2018/05/02/changing-the-location-of-docker-named-volumes/)
-
 [Docker videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=docker)
+
+[containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
 
 ### mariadb/mysql
 
@@ -44,15 +38,15 @@
 
 ## On host machine
 
-### To access wordpress from domaine name:
+#### Access wordpress from domaine name
 
 ```
 echo '127.0.0.1 localhost trobin.42.fr' >> '/etc/hosts'
 ```
 
-N.B: `/etc/hosts` equivalent on Windows is `C:\Windows\System32\drivers\etc\hosts`
+N.B.: `/etc/hosts` equivalent on Windows is `C:\Windows\System32\drivers\etc\hosts`
 
-### To use docker without sudo
+#### Use docker without sudo
 
 ```
 sudo groupadd docker && \
@@ -81,3 +75,5 @@ Display data stored into a table: `SELECT * FROM table_name;`
 Access wordpress administration dashboard: `https://example.com/wp-admin`
 
 Ensure that mysql server is running: `mysqladmin version`
+
+Retieve wordpress IP address from mariadb container: `ping wordpress | head -1 | awk -F '[()]' '{print $2}'`
