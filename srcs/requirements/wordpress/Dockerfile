@@ -38,6 +38,7 @@ ARG db_host \
     db_prefix \
     wp_url \
     wp_title \
+    wp_debug \
     wp_admin_user \
     wp_admin_pass \
     wp_admin_mail
@@ -49,6 +50,7 @@ ENV	DB_HOST=$db_host \
 	DB_PREFIX=$db_prefix \
     WP_URL=$wp_url \
     WP_TITLE=$wp_title \
+    WP_DEBUG=$wp_debug \
     WP_ADMIN_USER=$wp_admin_user \
     WP_ADMIN_PASS=$wp_admin_pass \
     WP_ADMIN_MAIL=$wp_admin_mail

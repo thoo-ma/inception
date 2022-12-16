@@ -40,14 +40,18 @@ fi
 # unset DB_HOST DB_NAME DB_USER DB_PASS \
 #	  WP_URL WP_TITLE WP_ADMIN_USER WP_ADMIN_PASS WP_ADMIN_MAIL
 
-# debug
-wp config set WP_DEBUG true --raw
-wp config set WP_DEBUG_LOG true --add --raw
-wp config set WP_DEBUG_DISPLAY false --add --raw
-wp config set WP_HOME "https://$WP_URL" --add
-wp config set WP_SITEURL "https://$WP_URL" --add
-echo "update_option( 'siteurl', "https://$WP_URL" );" >> /var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php
-echo "update_option( 'home', "https://$WP_URL" );" >> /var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php
-sed -i "/define( 'WP_DEBUG_DISPLAY', false );/a @ini_set( 'display_errors', 0 );" /var/www/inception/public_html/wp-config.php
+# Debug mode
+if [ ! -z $WP_DEBUG ] ; then
+#    theme_functions='/var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php'
+    wp_config='/var/www/inception/public_html/wp-config.php'
+	wp config set WP_DEBUG true --raw
+	wp config set WP_DEBUG_LOG true --add --raw
+	wp config set WP_DEBUG_DISPLAY false --add --raw
+#	wp config set WP_HOME "https://$WP_URL" --add
+#	wp config set WP_SITEURL "https://$WP_URL" --add
+#	echo "update_option( 'siteurl', "https://$WP_URL" );" >> $theme_functions
+#	echo "update_option( 'home', "https://$WP_URL" );" >> $theme_functions
+	sed -i "/define( 'WP_DEBUG_DISPLAY', false );/a @ini_set( 'display_errors', 0 );" $wp_config
+fi
 
 exec php-fpm8.1 --nodaemonize
