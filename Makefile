@@ -16,7 +16,7 @@ all: 					volumes
 						&& docker compose up $* --build --detach
 
 %_it:				;	cd $(docker_compose_dir) \
-						&& docker compose exec $* /bin/bash # --user trobin
+						&& docker compose exec $* /bin/bash
 
 %_stop:				;	cd $(docker_compose_dir) \
 						&& docker compose stop $*

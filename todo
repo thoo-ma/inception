@@ -1,5 +1,4 @@
 - when we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
-- handle correctyl users and permissions (www-data, nginx, trobin)
+- handle correctly users and permissions (www-data, nginx, trobin)
 - change wordpress admin username and password
-- healthcheck plugin wordpress
-- check if container erstar is working as supposed to
+- check if container restart is working as supposed to
