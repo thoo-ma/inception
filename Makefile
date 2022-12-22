@@ -1,6 +1,6 @@
 mariadb_volume		=	$(HOME)/data/mariadb
 wordpress_volume	=	$(HOME)/data/wordpress/public_html
-docker_compose_dir	=	$(HOME)/42/inception/srcs
+docker_compose_dir	=	$(HOME)/inception/srcs
 
 #nginx_volume:		;
 nginx_volume:		;	mkdir -p $(wordpress_volume)

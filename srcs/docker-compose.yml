@@ -20,9 +20,9 @@ services:
       - "9000"
     volumes:
       - wordpress:/var/www/inception
-    depends_on:
-      wordpress:
-        condition: service_started # service_ [ started | healthy | completed_successfully ]
+        #    depends_on:
+        #      wordpress:
+        #        condition: service_started # service_ [ started | healthy | completed_successfully ]
 #   restart: always
   wordpress: # ----------------------------------------------------------------
     build:
@@ -44,11 +44,11 @@ services:
     expose:
       - "3306"
       - "9000"
-    depends_on:
-      mariadb:
-        condition: service_started # service_ [ started | healthy | completed_successfully ]
+        #    depends_on:
+        #      mariadb:
+        #        condition: service_started # service_ [ started | healthy | completed_successfully ]
     volumes:
-      - wordpress:/var/www/inception
+      - wordpress:/var/www/inception/public_html
 #   restart: always
   mariadb: # ------------------------------------------------------------------
     build:
@@ -73,13 +73,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/youngbenjaminhorne/data/wordpress
+      device: /home/trobin/data/wordpress
   mariadb:
     driver: local # local-persist (?)
     driver_opts:
       type: none
       o: bind
-      device: /home/youngbenjaminhorne/data/mariadb
+      device: /home/trobin/data/mariadb
 # -----------------------------------------------------------------------------
 networks:
   default:
