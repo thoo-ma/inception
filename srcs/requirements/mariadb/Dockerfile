@@ -26,6 +26,7 @@ RUN apt-get install -y mariadb-common mariadb-server mariadb-client # do we real
 
 # Why this is not automatically created ? And is it still useful since
 # we will switch from `unix socket` to `ed25519` authentication plugin ?
+# TODO chmod 700 ???????
 RUN mkdir -p /run/mysqld && \
     touch /run/mysqld/mysqld.sock && \
     chown -R mysql:mysql /run/mysqld && \
@@ -41,7 +42,7 @@ RUN mkdir -p /run/mysqld && \
 # Commands like `mysqladmin version` or `service mariadb status` won't be available anymore...
 # RUN sed -i -e '/^\[mariadb\]$/a disable_unix_socket' $server_config
 
-COPY conf/* /scripts/
+COPY tools/* /scripts/
 RUN chmod +x /scripts/*
 
 ARG mysql_root_password \

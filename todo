@@ -1,21 +1,27 @@
-1. rename wordpress `configure.sh` to `entrypoint.sh`
-2. Change wordpress admin username and password
-3. Rename `conf/` to `tools/` when appropriate
-4. Handle correctly users and permissions (www-data, nginx, trobin)
-5. Check if container restart is working as supposed to
-6. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
-7. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
-8. (?) When we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
-9. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
+BEFORE DEBUG FORKING
+___________________
+1. Change wordpress admin username and password
+2. Handle correctly users and permissions (www-data, nginx, trobin) + chmod
+3. Check if container restart is working as supposed to
+4. Wordpress Dockerfile: gather all apt installations into one RUN command
+   --> except `wget` and `lsb_release`
+5. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
+6. (?) dockerignore
+7. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
    --> or add top-level `name: "inception"` into `docker-compose.yml`
-10.(?) Remove packages used only for debugging such as:
-       - (?) curl
-       - (?) lsof
-       - net-tools
-       - tree
-       - vim
+
+
+AFTER DEBUG FORKING
+___________________
+1. Remove packages used only for debugging such as:
+    - (?) curl
+    - (?) lsof
+    - net-tools
+    - tree
+    - vim
    --> will reduce the size of the image
    --> will enhance containers security by reducing the number of vectors of attack
-11. Wordpress Dockerfile: gather all apt installations into one RUN command (expect wget and lsb_release)
-12. (?) dockerignore
-13. cf readme lemp link for the use of healthcheck
+2. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
+3. Allow remote connexions to specific compose service address (instead of 0.0.0.0.:*)
+   --> cf. `netstat -tuplen`, field `Foreign Address`
+4. cf. readme lemp link for the use of healthcheck

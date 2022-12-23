@@ -57,7 +57,7 @@ ENV	DB_HOST=$db_host \
     WP_ADMIN_PASS=$wp_admin_pass \
     WP_ADMIN_MAIL=$wp_admin_mail
 
-COPY conf/configure.sh /scripts/configure.sh
+COPY tools/entrypoint.sh /scripts/entrypoint.sh
 
 # (?) TODO useradd `--password`
 RUN useradd --create-home $db_user && \
@@ -66,13 +66,13 @@ RUN useradd --create-home $db_user && \
     touch /var/log/php8.1-fpm.log && \
     chown $db_user:$db_user /run/php/php8.1-fpm.pid && \
     chown $db_user:$db_user /var/log/php8.1-fpm.log && \
-    chown $db_user:$db_user /scripts/configure.sh && \
+    chown $db_user:$db_user /scripts/entrypoint.sh && \
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini && \
     sed -i 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf && \
-    chmod +x /scripts/configure.sh
+    chmod +x /scripts/entrypoint.sh
 
 USER $db_user
 
 WORKDIR /scripts
 
-ENTRYPOINT ["./configure.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
