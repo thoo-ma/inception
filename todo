@@ -1,4 +1,18 @@
-- when we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
-- handle correctly users and permissions (www-data, nginx, trobin)
-- change wordpress admin username and password
-- check if container restart is working as supposed to
+1. Gather RUN commands together when possible to avoid intermediate build images proliferation
+2. Change wordpress admin username and password
+3. Rename `conf/` to `tools/` when appropriate
+4. Handle correctly users and permissions (www-data, nginx, trobin)
+5. Check if container restart is working as supposed to
+6. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
+7. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
+8. (?) When we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
+9. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
+   --> or add top-level `name: "inception"` into `docker-compose.yml`
+10.(?) Remove packages used for debugging such as:
+       - (?) curl
+       - (?) lsof
+       - net-tools
+       - tree
+       - vim
+   --> will reduce the size of the image
+   --> will enhance containers security by reducing the number of vectors of attack

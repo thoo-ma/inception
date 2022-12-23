@@ -3,7 +3,7 @@ version: "3.8"
 services:
   nginx: # --------------------------------------------------------------------
     build:
-      context: requirements/nginx # https://stackoverflow.com/a/35260151
+      context: requirements/nginx
       args:
         domain_name: $DOMAIN_NAME
         ssl_crt: $SSL_CERTIFICATE
@@ -113,7 +113,3 @@ networks:
 # About secrets (not needed _at all_ by the subject)
 # https://docs.docker.com/engine/swarm/secrets/
 # https://www.rockyourcode.com/using-docker-secrets-with-docker-compose/
-
-# TODO
-# on host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
-# add `COMPOSE_PROJECT_NAME=inception` into `.env` -- or add top-level `name: "inception"` here

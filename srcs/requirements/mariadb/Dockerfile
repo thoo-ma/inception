@@ -1,13 +1,13 @@
 From debian:buster
 
-RUN apt-get update
-RUN apt-get install -y expect
-RUN apt-get install -y vim
-RUN apt-get install -y curl # ??
-RUN apt-get install -y ca-certificates # ??
-RUN apt-get install -y tree # remove
-RUN apt-get install -y net-tools # netstat
-RUN apt-get install -y lsof # ??
+RUN apt-get update && \
+    apt-get install -y \
+    ca-certificates \
+    curl \
+    lsof \
+    net-tools \
+    tree \
+    vim
 
 # /!\ LTS FTW /!\
 # By default, mariadb-server apt package will refer to version 10.3
@@ -58,4 +58,3 @@ RUN export MYSQL_ROOT_PASSWORD=$mysql_root_password \
            && ./scripts/configure.sh
 
 ENTRYPOINT ["mysqld", "--user=mysql", "--bind-address=0.0.0.0"]
-# ENTRYPOINT ["mysqld", "--user=mysql", "--bind-address=0.0.0.0", "--log-bin=mysqld-bin"]

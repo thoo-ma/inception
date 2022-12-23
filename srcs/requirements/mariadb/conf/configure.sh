@@ -3,11 +3,6 @@
 function comment   () { sed -i "/$2/s/^/#/g" $1; }
 function uncomment () { sed -i "/$2/s/^#//g" $1; }
 
-server_config='/etc/mysql/mariadb.conf.d/50-server.cnf'
-
-# mysql server/daemon will _always_ start from mysql host user -- TODO (?) remove
-# uncomment $server_config 'user'
-
 # Start mysql server with mysql host user
 mysqld --user=mysql &
 
@@ -26,6 +21,7 @@ sleep 20
 
 # Debug mode
 if [ ! -z $MYSQL_DEBUG ] ; then
+    server_config='/etc/mysql/mariadb.conf.d/50-server.cnf'
     uncomment $server_config 'general_log'
     uncomment $server_config 'log_error'
 	sed -i '/^\[mariadb\]/a log_warnings=4' $server_config
@@ -38,7 +34,3 @@ if ! mysqlshow | grep $DB_NAME ; then
     GRANT ALL PRIVILEGES ON $DB_NAME.* to '$MYSQL_USER_NAME'@'wordpress.inception' IDENTIFIED BY '$MYSQL_USER_PASS'; \
     FLUSH PRIVILEGES;"
 fi
-
-# mysqld --user=mysql stop
-# wordpress_ip=$(ping wordpress | head -1 | awk -F '[()]' '{print $2}')
-# exec -c mysqld --user=mysql --bind-address=$wordpress_ip

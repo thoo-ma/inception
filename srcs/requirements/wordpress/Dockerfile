@@ -1,26 +1,29 @@
 FROM debian:buster
 
-RUN apt-get update
-RUN apt-get install -y wget
-RUN apt-get install -y vim # ??
-RUN apt-get install -y curl # ??
-RUN apt-get install -y less # needed by wp-cli (https://github.com/wp-cli/wp-cli/issues/5333)
-RUN apt-get install -y lsb-release # ??
-RUN apt-get install -y ca-certificates # ??
-RUN apt-get install -y apt-transport-https # ??
-RUN apt-get install -y mariadb-client
-RUN apt-get install -y net-tools # netstat
-RUN apt-get install -y lsof # ??
+# yes, backticks subshells are dirty but i wanted to comment stuff here
+RUN apt-get update && \
+    apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    less `# needed by wp-cli (https://github.com/wp-cli/wp-cli/issues/5333)` \
+    lsb-release \
+    lsof \
+    mariadb-client \
+    net-tools \
+    vim \
+    wget
 
 # Install php8.1 (LTS)
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-RUN apt-get update
-RUN apt-get install -y php8.1
-RUN apt-get install -y php8.1-fpm
-RUN apt-get install -y php8.1-curl # ??
-RUN apt-get install -y php8.1-mysql
-RUN apt-get install -y sendmail # needed by wordpress config
+RUN apt-get update && \
+    apt-get install -y \
+    php8.1 \
+    php8.1-curl \
+    php8.1-fpm \
+    php8.1-mysql \
+    sendmail # needed because `--admin_email` is used by `wp core install`
 
 # Download wp-cli (OS-agnostic way)
 WORKDIR /tmp
