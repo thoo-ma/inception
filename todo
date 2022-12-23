@@ -1,7 +1,8 @@
 BEFORE DEBUG FORKING
 ___________________
 1. Change wordpress admin username and password
-2. Handle correctly users and permissions (www-data, nginx, trobin) + chmod
+2. Handle correctly users and permissions (www-data, nginx, trobin)
+   --> especially for folders under /run directory !!
 3. Check if container restart is working as supposed to
 4. Wordpress Dockerfile: gather all apt installations into one RUN command
    --> except `wget` and `lsb_release`
