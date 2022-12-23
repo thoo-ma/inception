@@ -59,23 +59,19 @@ ENV	DB_HOST=$db_host \
 
 COPY conf/configure.sh /scripts/configure.sh
 
-# TODO use MYSQL_USER_NAME (or DB_USER)
-# (?) TODO chmod 755 --> 774 --> 664
 # (?) TODO useradd `--password`
-RUN useradd --create-home trobin && \
+RUN useradd --create-home $db_user && \
     mkdir -p /run/php && \
     touch /run/php/php8.1-fpm.pid && \
     touch /var/log/php8.1-fpm.log && \
-    chown trobin:trobin /run/php/php8.1-fpm.pid && \
-    chown trobin:trobin /var/log/php8.1-fpm.log && \
-    chown trobin:trobin /scripts/configure.sh && \
-    chmod +x /scripts/configure.sh && \
-    chmod 755 /run/php/php8.1-fpm.pid && \
-    chmod 755 /var/log/php8.1-fpm.log && \
+    chown $db_user:$db_user /run/php/php8.1-fpm.pid && \
+    chown $db_user:$db_user /var/log/php8.1-fpm.log && \
+    chown $db_user:$db_user /scripts/configure.sh && \
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini && \
-    sed -i 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf
+    sed -i 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf && \
+    chmod +x /scripts/configure.sh
 
-USER trobin
+USER $db_user
 
 WORKDIR /scripts
 

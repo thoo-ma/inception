@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# The following commands _need_ to be performed into an antrypoint script
-# since they download and edit files into a bind-mounted folder.
+# The following commands _needs_ to be performed into an antrypoint script
+# since they download and edit files into a bind-mounted folder,
+# which is _not_ accessible during build time (i.e. to any RUN command).
 
 # ending semicolon is important
 function success () { echo "$1: SUCCESS" >> /tmp/wp.log; }

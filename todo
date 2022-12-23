@@ -1,5 +1,4 @@
-0. rename wordpress `configure.sh` to `entrypoint.sh`
-1. Gather RUN commands together when possible to avoid intermediate build images proliferation
+1. rename wordpress `configure.sh` to `entrypoint.sh`
 2. Change wordpress admin username and password
 3. Rename `conf/` to `tools/` when appropriate
 4. Handle correctly users and permissions (www-data, nginx, trobin)

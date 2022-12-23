@@ -81,3 +81,7 @@ Access wordpress administration dashboard: `https://example.com/wp-admin`
 Ensure that mysql server is running: `mysqladmin version`
 
 Get wordpress IP address from mariadb container: `ping wordpress | head -1 | awk -F '[()]' '{print $2}'`
+
+List wordpress comments: `wp comment list`
+
+Approve wordpress comment: `wp comment approve comment_id`
