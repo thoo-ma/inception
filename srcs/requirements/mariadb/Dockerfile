@@ -26,10 +26,10 @@ RUN apt-get install -y mariadb-common mariadb-server mariadb-client # do we real
 
 # Why this is not automatically created ? And is it still useful since
 # we will switch from `unix socket` to `ed25519` authentication plugin ?
-RUN mkdir -p /run/mysqld/
-RUN touch /run/mysqld/mysqld.sock
-RUN chmod -R 777 /run/mysqld # ??
-RUN chown -R mysql:mysql /run/mysqld
+RUN mkdir -p /run/mysqld && \
+    touch /run/mysqld/mysqld.sock && \
+    chown -R mysql:mysql /run/mysqld && \
+    chmod -R 700 /run/mysqld
 
 # Enable ed25519 authentication plugin (already installed at `/usr/lib/mysql/plugin/`)
 # cf. https://mariadb.com/kb/en/authentication-plugin-ed25519/

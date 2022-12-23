@@ -29,6 +29,7 @@ services:
         db_user: $DB_USER
         db_pass: $DB_PASS
         db_prefix: $DB_PREFIX
+        wp_dir: $WP_DIR
         wp_url: $WP_URL
         wp_title: $WP_TITLE
         wp_debug: $WP_DEBUG

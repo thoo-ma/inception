@@ -8,14 +8,14 @@ function success () { echo "$1: SUCCESS" >> /tmp/wp.log; }
 function failure () { echo "$1: FAILURE" >> /tmp/wp.log; }
 
 # Wordpress download
-if wp core download;
+if wp core --path=$WP_DIR download;
 	then success "download"
 	else failure "download"
 fi
 
 # Wordpress config
 # TODO (?) delete `--force`
-if wp core config \
+if wp core --path=$WP_DIR config \
     --dbhost=$DB_HOST \
 	--dbname=$DB_NAME \
     --dbuser=$DB_USER \
@@ -28,7 +28,7 @@ fi
 
 # Wordpress install
 # This take so much time and doesn't block execution flow ...
-if wp core install \
+if wp core --path=$WP_DIR install \
 	--url=$WP_URL \
     --title=$WP_TITLE \
     --admin_user=$WP_ADMIN_USER \

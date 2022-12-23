@@ -1,23 +1,23 @@
 FROM debian:buster
 
-# yes, backticks subshells are dirty but i wanted to comment stuff here
 RUN apt-get update && \
     apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
     less `# needed by wp-cli (https://github.com/wp-cli/wp-cli/issues/5333)` \
-    lsb-release \
+    lsb-release `# needed to install php (cf. below)` \
     lsof \
     mariadb-client \
     net-tools \
     vim \
-    wget
+    wget # needed to install php (cf. below)
 
-# Install php8.1 (LTS)
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-RUN apt-get update && \
+RUN wget --output-document=/etc/apt/trusted.gpg.d/php.gpg \
+    https://packages.sury.org/php/apt.gpg &&  \
+    echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | \
+    tee /etc/apt/sources.list.d/php.list && \
+    apt-get update && \
     apt-get install -y \
     php8.1 \
     php8.1-curl \
@@ -26,16 +26,17 @@ RUN apt-get update && \
     sendmail # needed because `--admin_email` is used by `wp core install`
 
 # Download wp-cli (OS-agnostic way)
-WORKDIR /tmp
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+RUN curl \
+    https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    --output /usr/local/bin/wp && \
+    chmod +x /usr/local/bin/wp
 
 ARG db_host \
 	db_name \
     db_user \
     db_pass \
     db_prefix \
+    wp_dir \
     wp_url \
     wp_title \
     wp_debug \
@@ -48,6 +49,7 @@ ENV	DB_HOST=$db_host \
 	DB_USER=$db_user \
 	DB_PASS=$db_pass \
 	DB_PREFIX=$db_prefix \
+    WP_DIR=$wp_dir \
     WP_URL=$wp_url \
     WP_TITLE=$wp_title \
     WP_DEBUG=$wp_debug \
@@ -55,25 +57,26 @@ ENV	DB_HOST=$db_host \
     WP_ADMIN_PASS=$wp_admin_pass \
     WP_ADMIN_MAIL=$wp_admin_mail
 
-RUN useradd trobin # MYSQL_USER_NAME
-RUN mkdir /home/trobin
-RUN chown trobin:trobin /home/trobin
-
 COPY conf/configure.sh /scripts/configure.sh
-RUN mkdir -p /run/php
-RUN touch /run/php/php8.1-fpm.pid
-RUN touch /var/log/php8.1-fpm.log
-RUN chown trobin:trobin /run/php/php8.1-fpm.pid
-RUN chown trobin:trobin /var/log/php8.1-fpm.log
-RUN sed -i -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini
-RUN sed -i -e 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf
-RUN chown trobin:trobin /scripts/configure.sh
-# RUN mkdir -p /var/www/inception/public_html
-# RUN chown -R trobin:trobin /var/www/inception
-USER trobin
-RUN chmod +x /scripts/configure.sh
-RUN chmod 755 /run/php/php8.1-fpm.pid
-RUN chmod 755 /var/log/php8.1-fpm.log
 
-WORKDIR /var/www/inception/public_html
-ENTRYPOINT ["/scripts/configure.sh"]
+# TODO use MYSQL_USER_NAME (or DB_USER)
+# (?) TODO chmod 755 --> 774 --> 664
+# (?) TODO useradd `--password`
+RUN useradd --create-home trobin && \
+    mkdir -p /run/php && \
+    touch /run/php/php8.1-fpm.pid && \
+    touch /var/log/php8.1-fpm.log && \
+    chown trobin:trobin /run/php/php8.1-fpm.pid && \
+    chown trobin:trobin /var/log/php8.1-fpm.log && \
+    chown trobin:trobin /scripts/configure.sh && \
+    chmod +x /scripts/configure.sh && \
+    chmod 755 /run/php/php8.1-fpm.pid && \
+    chmod 755 /var/log/php8.1-fpm.log && \
+    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.1/fpm/php.ini && \
+    sed -i 's/^listen\s*=\s*\/run\/php\/php8.1-fpm.sock/listen = 9000/' /etc/php/8.1/fpm/pool.d/www.conf
+
+USER trobin
+
+WORKDIR /scripts
+
+ENTRYPOINT ["./configure.sh"]

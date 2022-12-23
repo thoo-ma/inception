@@ -1,3 +1,4 @@
+0. rename wordpress `configure.sh` to `entrypoint.sh`
 1. Gather RUN commands together when possible to avoid intermediate build images proliferation
 2. Change wordpress admin username and password
 3. Rename `conf/` to `tools/` when appropriate
@@ -8,7 +9,7 @@
 8. (?) When we do `netstat -tuplen` (for instance in mariadb) customise the `Foreign Address` field to point to the container supposed to reach the service (instead of 0.0.0.0.:*)
 9. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
    --> or add top-level `name: "inception"` into `docker-compose.yml`
-10.(?) Remove packages used for debugging such as:
+10.(?) Remove packages used only for debugging such as:
        - (?) curl
        - (?) lsof
        - net-tools
@@ -16,3 +17,6 @@
        - vim
    --> will reduce the size of the image
    --> will enhance containers security by reducing the number of vectors of attack
+11. Wordpress Dockerfile: gather all apt installations into one RUN command (expect wget and lsb_release)
+12. (?) dockerignore
+13. cf readme lemp link for the use of healthcheck
