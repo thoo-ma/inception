@@ -1,18 +1,18 @@
-## Ressources
+## Useful ressources
 
-### LEMP
+#### lemp
 
 [LEMP with docker-compose](https://tech.osteel.me/posts/docker-for-local-web-development-part-1-a-basic-lemp-stack)
 
-### nginx
+#### nginx
 
 [Configure nginx https server](https://nginx.org/en/docs/http/configuring_https_servers.html)
 
 [Configure nginx for serving wordpress](https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/)
 
-### wordpress
+#### wordpress
 
-### Docker
+#### docker
 
 [Docker videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=docker)
 
@@ -20,7 +20,7 @@
 
 [Containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
 
-### mariadb/mysql
+#### mariadb/mysql
 
 [SQL videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=sql)
 
