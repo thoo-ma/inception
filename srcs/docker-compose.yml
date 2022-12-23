@@ -11,19 +11,15 @@ services:
     container_name: nginx
     hostname: nginx
     ports:
-      - "443:443" # host_port:container_port
-#     - target: 443 # container port
-#       published: 443 # host port
-#       protocol: tcp
-#       mode: host
+      - "443:443"
     expose:
       - "9000"
     volumes:
       - wordpress:/var/www/inception
-        #    depends_on:
-        #      wordpress:
-        #        condition: service_started # service_ [ started | healthy | completed_successfully ]
-#   restart: always
+    depends_on:
+      wordpress:
+        condition: service_started # service_ [ started | healthy | completed_successfully ]
+    restart: always
   wordpress: # ----------------------------------------------------------------
     build:
       context: requirements/wordpress
@@ -44,12 +40,12 @@ services:
     expose:
       - "3306"
       - "9000"
-        #    depends_on:
-        #      mariadb:
-        #        condition: service_started # service_ [ started | healthy | completed_successfully ]
+    depends_on:
+      mariadb:
+        condition: service_started # service_ [ started | healthy | completed_successfully ]
     volumes:
-      - wordpress:/var/www/inception/public_html
-#   restart: always
+      - wordpress:/var/www/inception
+    restart: always
   mariadb: # ------------------------------------------------------------------
     build:
       context: requirements/mariadb
@@ -65,7 +61,7 @@ services:
       - mariadb:$MYSQL_DATA_DIRECTORY
     expose:
       - "3306"
-#   restart: always
+    restart: always
 # -----------------------------------------------------------------------------
 volumes:
   wordpress:

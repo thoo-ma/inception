@@ -10,6 +10,8 @@
 
 [configure nginx https server](https://nginx.org/en/docs/http/configuring_https_servers.html)
 
+[Configure nginx for serving wordpress](https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/)
+
 ### wordpress
 
 ### Docker
@@ -35,6 +37,10 @@
 [SQL videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=sql)
 
 [About mariadb.sys user](https://www.thegeekdiary.com/what-is-the-purpose-of-mysql-syslocalhost-user/)
+
+[About authentication](https://dba.stackexchange.com/a/209520)
+
+[Mysql post-installation](https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html)
 
 ## On host machine
 
@@ -76,4 +82,4 @@ Access wordpress administration dashboard: `https://example.com/wp-admin`
 
 Ensure that mysql server is running: `mysqladmin version`
 
-Retieve wordpress IP address from mariadb container: `ping wordpress | head -1 | awk -F '[()]' '{print $2}'`
+Get wordpress IP address from mariadb container: `ping wordpress | head -1 | awk -F '[()]' '{print $2}'`

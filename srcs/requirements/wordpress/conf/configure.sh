@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# The following commands _need_ to be performed into an antrypoint script
+# since they download and edit files into a bind-mounted folder.
+
 # ending semicolon is important
 function success () { echo "$1: SUCCESS" >> /tmp/wp.log; }
 function failure () { echo "$1: FAILURE" >> /tmp/wp.log; }
@@ -35,11 +38,6 @@ if wp core install \
 	else failure "install"
 fi
 
-# TODO this doesn't work...
-# env > /tmp/env
-# unset DB_HOST DB_NAME DB_USER DB_PASS \
-#	  WP_URL WP_TITLE WP_ADMIN_USER WP_ADMIN_PASS WP_ADMIN_MAIL
-
 # Debug mode
 if [ ! -z $WP_DEBUG ] ; then
 #    theme_functions='/var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php'
@@ -54,4 +52,5 @@ if [ ! -z $WP_DEBUG ] ; then
 	sed -i "/define( 'WP_DEBUG_DISPLAY', false );/a @ini_set( 'display_errors', 0 );" $wp_config
 fi
 
-exec php-fpm8.1 --nodaemonize
+# Unfortunately `-c` option doesn't ignore Dokerfile's ENV variables
+exec -c php-fpm8.1 --nodaemonize

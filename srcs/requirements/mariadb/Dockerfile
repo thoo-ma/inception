@@ -1,30 +1,13 @@
 From debian:buster
 
-# -------- Documentation ----------------------------------------------------- #
-
-# mysql
-# cf. https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html
-# cf. https://dev.mysql.com/doc/refman/8.0/en/changing-mysql-user.html
-# cf. https://dev.mysql.com/doc/refman/8.0/en/server-options.html
-# cf. https://dev.mysql.com/doc/refman/8.0/en/mysqld-safe.html
-# cf. http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/
-
-# Authentication
-# cf. https://dba.stackexchange.com/a/209520
-
-# -------- Installation ------------------------------------------------------ #
-
 RUN apt-get update
 RUN apt-get install -y expect
 RUN apt-get install -y vim
-RUN apt-get install -y curl
-RUN apt-get install -y ca-certificates
+RUN apt-get install -y curl # ??
+RUN apt-get install -y ca-certificates # ??
 RUN apt-get install -y tree # remove
 RUN apt-get install -y net-tools # netstat
-RUN apt-get install -y lsof
-#RUN apt-get install -y apt-utils
-
-# RUN apt-get install -y expect vim curl ca-certificates tree net-tools lsof
+RUN apt-get install -y lsof # ??
 
 # /!\ LTS FTW /!\
 # By default, mariadb-server apt package will refer to version 10.3
@@ -40,8 +23,6 @@ RUN apt-get install -y mariadb-common mariadb-server mariadb-client # do we real
 
 # https://mariadb.com/kb/en/plugin-overview/#installing-a-pluginhttps://mariadb.com/kb/en/plugin-overview/#installing-a-plugin
 # RUN apt-get install -y libmysqlclient18
-
-# -------- Configuration ----------------------------------------------------- #
 
 # Why this is not automatically created ? And is it still useful since
 # we will switch from `unix socket` to `ed25519` authentication plugin ?
@@ -75,8 +56,6 @@ RUN export MYSQL_ROOT_PASSWORD=$mysql_root_password \
            MYSQL_DEBUG=$mysql_debug \
            DB_NAME=$db_name \
            && ./scripts/configure.sh
-
-# -------- Entrypoint -------------------------------------------------------- #
 
 ENTRYPOINT ["mysqld", "--user=mysql", "--bind-address=0.0.0.0"]
 # ENTRYPOINT ["mysqld", "--user=mysql", "--bind-address=0.0.0.0", "--log-bin=mysqld-bin"]
