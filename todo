@@ -1,7 +1,6 @@
-1. Check if container restart is working as supposed to
-2. Handle correctly users and permissions (www-data, nginx, trobin)
+1. Handle correctly users and permissions (www-data, nginx, trobin)
    --> especially for folders under /run directory !!
-3. Remove packages used only for debugging such as:
+2. Remove packages used only for debugging such as:
     - (?) curl
     - (?) lsof
     - net-tools
@@ -9,10 +8,10 @@
     - vim
    --> will reduce the size of the image
    --> will enhance containers security by reducing the number of vectors of attack
-4. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
-5. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
-6. (?) dockerignore
-7. Allow remote connexions to specific compose service address (instead of 0.0.0.0.:*)
+3. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
+4. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
+5. (?) dockerignore
+6. Allow remote connexions to specific compose service address (instead of 0.0.0.0.:*)
    --> cf. `netstat -tuplen`, field `Foreign Address`
-8. `service_healty` instead of `service_started`
+7. `service_healty` instead of `service_started`
    --> cf. lemp link into `README.md` for how to use healthcheck
