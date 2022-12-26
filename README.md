@@ -85,3 +85,11 @@ Get wordpress IP address from mariadb container: `ping wordpress | head -1 | awk
 List wordpress comments: `wp comment list`
 
 Approve wordpress comment: `wp comment approve comment_id`
+
+## Security concerns
+
+Environment variables are not recommended to store any sentive data.
+They can be retrieved both from inside the container (running a simple `env` command) and from outside, on host machine where images are build and deployed, with `docker inspect`.
+
+Docker build arguments are not more recommended to store any sensitive data.
+They cannot be retrieved from a runnig container, but still from host machine where images are build and deployed, with `docker history`.
