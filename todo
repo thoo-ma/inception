@@ -1,18 +1,7 @@
-BEFORE DEBUG FORKING
-___________________
-1. Change wordpress admin username and password
+1. Check if container restart is working as supposed to
 2. Handle correctly users and permissions (www-data, nginx, trobin)
    --> especially for folders under /run directory !!
-3. Check if container restart is working as supposed to
-4. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
-5. (?) dockerignore
-6. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
-   --> or add top-level `name: "inception"` into `docker-compose.yml`
-
-
-AFTER DEBUG FORKING
-___________________
-1. Remove packages used only for debugging such as:
+3. Remove packages used only for debugging such as:
     - (?) curl
     - (?) lsof
     - net-tools
@@ -20,7 +9,10 @@ ___________________
     - vim
    --> will reduce the size of the image
    --> will enhance containers security by reducing the number of vectors of attack
-2. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
-3. Allow remote connexions to specific compose service address (instead of 0.0.0.0.:*)
+4. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
+5. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
+6. (?) dockerignore
+7. Allow remote connexions to specific compose service address (instead of 0.0.0.0.:*)
    --> cf. `netstat -tuplen`, field `Foreign Address`
-4. cf. readme lemp link for the use of healthcheck
+8. `service_healty` instead of `service_started`
+   --> cf. lemp link into `README.md` for how to use healthcheck

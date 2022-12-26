@@ -86,6 +86,8 @@ List wordpress comments: `wp comment list`
 
 Approve wordpress comment: `wp comment approve comment_id`
 
+Acess wordpress admin dashboard: `https://trobin.42.fr/wp-admin`
+
 ## Security concerns
 
 Environment variables are not recommended to store any sentive data.

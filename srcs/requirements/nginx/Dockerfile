@@ -27,6 +27,7 @@ RUN export DOMAIN_NAME=$domain_name \
 # Doesn't change permissions upon `var/www/inception` because
 # the volume is mounted at the very end of the build process.
 # (It doesn't even exist at this point.)
+# TODO is it useful ?
 RUN chown -R www-data:www-data /var/www;
 
 # cf. https://stackoverflow.com/a/23038211
