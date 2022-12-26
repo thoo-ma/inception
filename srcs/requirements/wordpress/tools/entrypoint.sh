@@ -3,6 +3,7 @@
 # The following commands _needs_ to be performed into an antrypoint script
 # since they download and edit files into a bind-mounted folder,
 # which is _not_ accessible during build time (i.e. to any RUN command).
+# /!\ EDIT. It might be possible with `RUN --mount` ... /!\
 
 # ending semicolon is important
 function success () { echo "$1: SUCCESS" >> /tmp/wp.log; }

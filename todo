@@ -4,11 +4,9 @@ ___________________
 2. Handle correctly users and permissions (www-data, nginx, trobin)
    --> especially for folders under /run directory !!
 3. Check if container restart is working as supposed to
-4. Wordpress Dockerfile: gather all apt installations into one RUN command
-   --> except `wget` and `lsb_release`
-5. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
-6. (?) dockerignore
-7. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
+4. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
+5. (?) dockerignore
+6. (?) Add `COMPOSE_PROJECT_NAME=inception` into `.env`
    --> or add top-level `name: "inception"` into `docker-compose.yml`
 
 
