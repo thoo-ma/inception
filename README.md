@@ -14,15 +14,11 @@
 
 #### docker
 
-[Docker videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=docker)
-
 [docker-curriculum](https://docker-curriculum.com/)
 
 [Containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
 
 #### mariadb/mysql
-
-[SQL videos on 42 intranet](https://elearning.intra.42.fr/searches/search?query=sql)
 
 [Mysql post-installation](https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html)
 
