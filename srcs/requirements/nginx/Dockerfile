@@ -44,6 +44,4 @@ RUN openssl req \
 # HTTP will pass through port 9000 instead of 80
 RUN sed -i 's/80/9000/' /etc/nginx/sites-enabled/default
 
-# cf. /var/log/nginx/error.log
-
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

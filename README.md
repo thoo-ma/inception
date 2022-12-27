@@ -84,6 +84,10 @@ Approve wordpress comment: `wp comment approve comment_id`
 
 Acess wordpress admin dashboard: `https://trobin.42.fr/wp-admin`
 
+## Useful files/directories
+
+nginx logs: `/var/log/nginx/access.log` and `/var/log/nginx/error.log`
+
 ## Security concerns
 
 Environment variables are not recommended to store any sentive data.
