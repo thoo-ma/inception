@@ -11,9 +11,9 @@ RUN apt-get update && \
     procps \
     vim
 
-ARG domain_name \
-    ssl_crt \
-    ssl_key
+ARG domain_name
+ARG ssl_crt
+ARG ssl_key
 
 # Generate nginx.conf from template (cf. https://stackoverflow.com/a/57891894d)
 # This is to allow environment variables into (template) config file
