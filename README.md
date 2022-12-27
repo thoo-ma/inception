@@ -1,44 +1,6 @@
-## Useful ressources
-
-#### lemp
-
-[LEMP with docker-compose](https://tech.osteel.me/posts/docker-for-local-web-development-part-1-a-basic-lemp-stack)
-
-#### nginx
-
-[Configure nginx https server](https://nginx.org/en/docs/http/configuring_https_servers.html)
-
-[Configure nginx for serving wordpress](https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/)
-
-#### wordpress
-
-#### docker
-
-[docker-curriculum](https://docker-curriculum.com/)
-
-[Containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
-
-#### mariadb/mysql
-
-[Mysql post-installation](https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html)
-
-[Mysql Authentication](https://mariadb.com/kb/en/authentication-plugin-unix-socket/)
-
-[Mysql best practices](https://docstore.mik.ua/orelly/weblinux2/orn/mysql_tips.html)
-
-[Mysql bind-address into Docker container](http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/)
-
-[About mariadb.sys user](https://www.thegeekdiary.com/what-is-the-purpose-of-mysql-syslocalhost-user/)
-
-[About authentication](https://dba.stackexchange.com/a/209520)
-
-[Mysql versions](https://endoflife.date/mysql)
-
-[Mariadb versions](https://endoflife.date/mariadb)
-
 ## On host machine
 
-#### Access wordpress from domaine name
+##### Access wordpress from domaine name
 
 ```
 echo '127.0.0.1 localhost trobin.42.fr' >> '/etc/hosts'
@@ -46,7 +8,7 @@ echo '127.0.0.1 localhost trobin.42.fr' >> '/etc/hosts'
 
 N.B.: `/etc/hosts` equivalent on Windows is `C:\Windows\System32\drivers\etc\hosts`
 
-#### Use docker without sudo
+##### Use docker without sudo
 
 ```
 sudo groupadd docker && \
@@ -95,3 +57,56 @@ They can be retrieved both from inside the container (running a simple `env` com
 
 Docker build arguments are not more recommended to store any sensitive data.
 They cannot be retrieved from a runnig container, but still from host machine where images are build and deployed, with `docker history`.
+
+## Useful ressources
+
+#### Docker
+
+[docker-curriculum](https://docker-curriculum.com/)
+[Containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
+
+#### Docker-compose
+
+##### restart
+[restart](https://github.com/compose-spec/compose-spec/blob/master/spec.md#restart)
+[restart_policy](https://github.com/compose-spec/compose-spec/blob/master/deploy.md#restart_policy)
+[restart_policy details](]https://docs.docker.com/config/containers/start-containers-automatically/#restart-policy-details)
+[restart policy and docker stop/kill](https://serverfault.com/a/884823)
+
+##### depends_on
+[depends_on](https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on)
+[healthcheck](https://github.com/compose-spec/compose-spec/blob/master/spec.md#healthcheck)
+
+##### network
+[networking in compose](https://docs.docker.com/compose/networking/)
+[ports](https://docs.docker.com/compose/compose-file/compose-file-v3/#ports)
+[expose](https://docs.docker.com/compose/compose-file/compose-file-v3/#expose)
+[expose vs ports](https://www.baeldung.com/ops/docker-compose-expose-vs-ports)
+
+##### env
+[env variables in compose](https://docs.docker.com/compose/environment-variables/)
+[env_file](https://docs.docker.com/compose/compose-file/compose-file-v3/#env_file)
+
+##### secrets (not needed _at all_ by the subject)
+[secrets without swarm](https://www.rockyourcode.com/using-docker-secrets-with-docker-compose/)
+
+#### Nginx
+
+[Configure nginx https server](https://nginx.org/en/docs/http/configuring_https_servers.html)
+[Configure nginx for serving wordpress](https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/)
+
+#### Mariadb/Mysql
+
+[Mysql post-installation](https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html)
+[Mysql Authentication](https://mariadb.com/kb/en/authentication-plugin-unix-socket/)
+[Mysql best practices](https://docstore.mik.ua/orelly/weblinux2/orn/mysql_tips.html)
+[Mysql bind-address into Docker container](http://txt.fliglio.com/2013/11/creating-a-mysql-docker-container/)
+[About mariadb.sys user](https://www.thegeekdiary.com/what-is-the-purpose-of-mysql-syslocalhost-user/)
+[About authentication](https://dba.stackexchange.com/a/209520)
+[Mysql versions](https://endoflife.date/mysql)
+[Mariadb versions](https://endoflife.date/mariadb)
+
+#### LEMP
+
+[LEMP with docker-compose](https://tech.osteel.me/posts/docker-for-local-web-development-part-1-a-basic-lemp-stack)
+
