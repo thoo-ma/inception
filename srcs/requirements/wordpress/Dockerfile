@@ -35,18 +35,18 @@ RUN curl \
     --output /usr/local/bin/wp && \
     chmod +x /usr/local/bin/wp
 
-ARG db_host \
-	db_name \
-    db_user \
-    db_pass \
-    db_prefix \
-    wp_dir \
-    wp_url \
-    wp_title \
-    wp_debug \
-    wp_admin_user \
-    wp_admin_pass \
-    wp_admin_mail
+ARG db_host
+ARG	db_name
+ARG db_user
+ARG db_pass
+ARG db_prefix
+ARG wp_dir
+ARG wp_url
+ARG wp_title
+ARG wp_debug
+ARG wp_admin_user
+ARG wp_admin_pass
+ARG wp_admin_mail
 
 ENV	DB_HOST=$db_host \
 	DB_NAME=$db_name \
