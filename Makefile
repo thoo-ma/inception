@@ -1,44 +1,36 @@
+compose_file		=	srcs/docker-compose.yml
+services			=	nginx mariadb wordpress
 mariadb_volume		=	$(HOME)/data/mariadb
 wordpress_volume	=	$(HOME)/data/wordpress/public_html
-docker_compose_dir	=	$(HOME)/inception/srcs
 
-#nginx_volume:		;
-nginx_volume:		;	mkdir -p $(wordpress_volume)
+nginx_volume:		;
 mariadb_volume:		;	mkdir -p $(mariadb_volume)
 wordpress_volume:	;	mkdir -p $(wordpress_volume)
 
-all: 					volumes
-						cd $(docker_compose_dir) \
-						&& docker compose up --build --detach
+all:	volumes		;	docker compose --file $(compose_file) up --build --detach
 
-%_up:					%_volume
-						cd $(docker_compose_dir) \
-						&& docker compose up $* --build --detach
+%_up:	%_volume	;	docker compose --file $(compose_file) up $* --build --detach
 
-%_it:				;	cd $(docker_compose_dir) \
-						&& docker compose exec $* /bin/bash
+%_it:				;	docker compose --file $(compose_file) exec $* /bin/bash
 
-%_stop:				;	cd $(docker_compose_dir) \
-						&& docker compose stop $*
+%_stop:				;	docker compose --file $(compose_file) stop $*
 
-%_log:				;	cd $(docker_compose_dir) \
-						&& docker compose logs $*
+%_log:				;	docker compose --file $(compose_file) logs $*
 
-%_clean:				%_stop
-						cd $(docker_compose_dir) \
-						&& docker system prune \
-						&& docker compose rm $* \
-						&& docker volume rm -f inception_$*
+%_clean:	%_stop	;	docker compose --file $(compose_file) rm $*
+
+%_fclean:	%_clean	;	docker volume rm --force inception_$*
 
 fclean:					clean
-						docker volume rm -f inception_mariadb
-						docker volume rm -f inception_wordpress
+						docker system prune
 						sudo rm -rf $(mariadb_volume)
 						sudo rm -rf $(wordpress_volume)
 
+stop:					$(foreach service, $(services), $(service)_stop)
+clean:					$(foreach service, $(services), $(service)_clean)
+fclean:					$(foreach service, $(services), $(service)_fclean)
+volumes:				$(foreach service, $(services), $(service)_volume)
+
 re:						fclean all
-stop:					nginx_stop mariadb_stop wordpress_stop
-clean:					nginx_clean mariadb_clean wordpress_clean
-volumes:				nginx_volume mariadb_volume wordpress_volume
 
 .SECONDEXPANSION:
