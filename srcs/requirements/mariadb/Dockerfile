@@ -43,11 +43,11 @@ RUN mkdir -p /run/mysqld && \
 COPY tools/* /scripts/
 RUN chmod +x /scripts/*
 
-ARG mysql_root_password \
-	mysql_user_name \
-	mysql_user_pass \
-	mysql_debug \
-    db_name
+ARG mysql_root_password
+ARG	mysql_user_name
+ARG	mysql_user_pass
+ARG	mysql_debug
+ARG db_name
 
 RUN export MYSQL_ROOT_PASSWORD=$mysql_root_password \
 		   MYSQL_USER_NAME=$mysql_user_name \

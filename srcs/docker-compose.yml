@@ -18,7 +18,7 @@ services:
       - wordpress:/var/www/inception
     depends_on:
       wordpress:
-        condition: service_started # service_ [ started | healthy | completed_successfully ]
+        condition: service_started
     restart: always
   wordpress: # ----------------------------------------------------------------
     build:
@@ -43,7 +43,7 @@ services:
       - "9000"
     depends_on:
       mariadb:
-        condition: service_started # service_ [ started | healthy | completed_successfully ]
+        condition: service_started
     volumes:
       - wordpress:/var/www/inception
     restart: always

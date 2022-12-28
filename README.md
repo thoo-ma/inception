@@ -127,8 +127,3 @@ They cannot be retrieved from a runnig container, but still from host machine wh
 [Mysql versions](https://endoflife.date/mysql)
 
 [Mariadb versions](https://endoflife.date/mariadb)
-
-#### LEMP
-
-[LEMP with docker-compose](https://tech.osteel.me/posts/docker-for-local-web-development-part-1-a-basic-lemp-stack)
-

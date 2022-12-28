@@ -1,6 +1,6 @@
-1. Handle correctly users and permissions (www-data, nginx, trobin)
-   --> especially for folders under /run directory !!
-2. Remove packages used only for debugging such as:
+1. nginx service: /var/www/inception is owned by user 1000, which doesn't exist (nor by www-data)
+2. mariadb volume is owned by systemd-resolve:systemd-journal -- why not by $USER ?
+3. Remove packages used only for debugging such as:
     - (?) curl
     - (?) lsof
     - net-tools
@@ -8,10 +8,9 @@
     - vim
    --> will reduce the size of the image
    --> will enhance containers security by reducing the number of vectors of attack
-3. (?) On host, set owner for docker volumes (systemd-resolve:systemd-journal by default)
 4. (?) Add `--log-bin=mysqld-bin` to mariadb ENTRYPOINT
 5. (?) dockerignore
 6. Allow remote connexions to specific compose service address (instead of 0.0.0.0.:*)
    --> cf. `netstat -tuplen`, field `Foreign Address`
-7. `service_healty` instead of `service_started`
-   --> cf. lemp link into `README.md` for how to use healthcheck
+7. into compose file: `service_completed_successfully` doesn't work.
+   --> would be better than `service_started` though
