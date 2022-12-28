@@ -66,6 +66,8 @@ They cannot be retrieved from a runnig container, but still from host machine wh
 
 [Containers best practices](https://cloud.google.com/architecture/best-practices-for-building-containers)
 
+[Containers in 500 lines of C](https://blog.lizzie.io/linux-containers-in-500-loc.html)
+
 #### Docker-compose
 
 ##### restart
