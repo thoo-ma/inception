@@ -2,7 +2,7 @@
 
 # Syntax and order of the questions depends on mariadb version.
 # Be careful to edit this file when mariadb version is updated.
-# Now this script is compliant with version 10.6 (LTS).
+# Now this script is compliant with version 10.3
 
 set yes  "y\n"
 set no   "n\n"
@@ -14,7 +14,6 @@ set timeout 1
 spawn mysql_secure_installation
 
 expect "Enter current password for root (enter for none):"  ; send $enter
-expect "Switch to unix_socket authentication \[Y/n\]"       ; send $no
 expect "Set root password? \[Y/n\]"                         ; send $yes
 expect "New password:"                                      ; send $password
 expect "Re-enter new password:"                             ; send $password
