@@ -47,6 +47,9 @@ ARG wp_debug
 ARG wp_admin_user
 ARG wp_admin_pass
 ARG wp_admin_mail
+ARG wp_regular_user
+ARG wp_regular_pass
+ARG wp_regular_mail
 
 ENV	DB_HOST=$db_host \
 	DB_NAME=$db_name \
@@ -59,7 +62,10 @@ ENV	DB_HOST=$db_host \
     WP_DEBUG=$wp_debug \
     WP_ADMIN_USER=$wp_admin_user \
     WP_ADMIN_PASS=$wp_admin_pass \
-    WP_ADMIN_MAIL=$wp_admin_mail
+    WP_ADMIN_MAIL=$wp_admin_mail \
+    WP_REGULAR_USER=$wp_regular_user \
+    WP_REGULAR_PASS=$wp_regular_pass \
+    WP_REGULAR_MAIL=$wp_regular_mail
 
 COPY tools/entrypoint.sh /scripts/entrypoint.sh
 

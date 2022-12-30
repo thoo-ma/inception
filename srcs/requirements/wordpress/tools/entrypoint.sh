@@ -40,6 +40,20 @@ if wp core --path=$WP_DIR install \
 	else failure "install"
 fi
 
+# Wait for install complete
+PID=$!
+wait $PID
+
+# Add wordpress user
+if wp --path=$WP_DIR user create \
+    $WP_REGULAR_USER \
+    $WP_REGULAR_MAIL \
+    --user_pass=$WP_REGULAR_PASS \
+    --role=contributor;
+    then success "user create"
+    else failure "user create"
+fi
+
 # Debug mode
 if [ ! -z $WP_DEBUG ] ; then
 #    theme_functions='/var/www/inception/public_html/wp-content/themes/twentytwentythree/functions.php'

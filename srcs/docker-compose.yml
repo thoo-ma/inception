@@ -36,6 +36,9 @@ services:
         wp_admin_user: $WP_ADMIN_USER
         wp_admin_pass: $WP_ADMIN_PASS
         wp_admin_mail: $WP_ADMIN_MAIL
+        wp_regular_user: $WP_REGULAR_USER
+        wp_regular_pass: $WP_REGULAR_PASS
+        wp_regular_mail: $WP_REGULAR_MAIL
     container_name: wordpress
     hostname: wordpress
     expose:
