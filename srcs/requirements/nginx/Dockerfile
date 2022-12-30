@@ -40,7 +40,4 @@ RUN openssl req \
     -keyout $ssl_key \
     -subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=trobin/CN=$domain_name/"
 
-# HTTP will pass through port 9000 instead of 80
-RUN sed -i 's/80/9000/' /etc/nginx/sites-enabled/default
-
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
