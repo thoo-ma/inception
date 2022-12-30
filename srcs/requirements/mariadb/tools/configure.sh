@@ -32,5 +32,6 @@ if ! mysqlshow | grep $DB_NAME ; then
     mysql --user=root --password=$MYSQL_ROOT_PASSWORD --execute "CREATE DATABASE $DB_NAME; \
     CREATE USER '$MYSQL_USER_NAME'@'wordpress.inception' IDENTIFIED BY '$MYSQL_USER_PASS'; \
     GRANT ALL PRIVILEGES ON $DB_NAME.* to '$MYSQL_USER_NAME'@'wordpress.inception' IDENTIFIED BY '$MYSQL_USER_PASS'; \
+    AlTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD'; \
     FLUSH PRIVILEGES;"
 fi
