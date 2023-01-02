@@ -16,14 +16,12 @@ if wp core --path=$WP_DIR download;
 fi
 
 # Wordpress config
-# TODO (?) delete `--force`
 if wp core --path=$WP_DIR config \
     --dbhost=$DB_HOST \
 	--dbname=$DB_NAME \
     --dbuser=$DB_USER \
     --dbpass=$DB_PASS \
-	--dbprefix=$DB_PREFIX \
-    --force;
+	--dbprefix=$DB_PREFIX;
 	then success "config"
 	else failure "config"
 fi
